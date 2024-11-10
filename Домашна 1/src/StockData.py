@@ -42,7 +42,7 @@ def get_latest_date(conn):
     return date.fetchone()[0]
 
 
-# Filter: Define custom headers
+
 def get_headers():
     return [
         "Датум",
@@ -110,7 +110,7 @@ def collect_stock_data_single_period(driver, stock, headers, latestDay, conn):
     except:
         return
 
-    # Parse the data
+
     soup = BeautifulSoup(driver.page_source, 'html.parser')
     tr_elements = soup.find_all('tr')
 
@@ -194,7 +194,6 @@ def main():
     if not os.path.exists('stock_data.db'):
         driver = initialize_webdriver()
         stocks = get_stocks(driver)
-        # Set up SQLite connection
         conn = sqlite3.connect('stock_data.db')
         cursor = conn.cursor()
 
