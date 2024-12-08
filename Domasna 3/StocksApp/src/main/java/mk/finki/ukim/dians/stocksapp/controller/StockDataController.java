@@ -2,6 +2,7 @@ package mk.finki.ukim.dians.stocksapp.controller;
 
 import mk.finki.ukim.dians.stocksapp.model.StockData;
 import mk.finki.ukim.dians.stocksapp.repository.StockRepository;
+import mk.finki.ukim.dians.stocksapp.service.StockAnalysisService;
 import mk.finki.ukim.dians.stocksapp.service.StockService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,10 +23,12 @@ import java.util.stream.Collectors;
 public class StockDataController {
     private final StockService stockService;
     private final StockRepository stockRepository;
+    private final StockAnalysisService stockAnalysisService;
 
-    public StockDataController(StockService stockService, StockRepository stockRepository) {
+    public StockDataController(StockService stockService, StockRepository stockRepository, StockAnalysisService stockAnalysisService) {
         this.stockService = stockService;
         this.stockRepository = stockRepository;
+        this.stockAnalysisService = stockAnalysisService;
     }
 
 @GetMapping("/all")
@@ -85,6 +88,17 @@ public ResponseEntity<List<StockData>> listAll(
         List<String> stockSymbols = stockService.findDistinctStockSymbols();
         return new ResponseEntity<>(stockSymbols,HttpStatus.OK);
 
+    }
+    @GetMapping("/rsi")
+    public ResponseEntity<BigDecimal> getRsi(@RequestParam String symbol){
+        List<StockData> listData = stockService.getByStockSymbol(symbol);
+        List<BigDecimal> prices = listData.stream()
+                .map(StockData::getLastTransactionPrice)
+                .collect(Collectors.toList());
+        prices.forEach(System.out::println);
+        BigDecimal rsiIndex = stockAnalysisService.calculateRSI(prices);
+
+        return new ResponseEntity<>(rsiIndex,HttpStatus.OK);
     }
 
 }
