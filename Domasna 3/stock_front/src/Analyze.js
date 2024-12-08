@@ -7,7 +7,8 @@ import React, {useEffect, useState} from "react";
 const Analyze = () => {
     const [stockSymbols, setStockSymbols] = useState([]);
     const [error, setError] = useState(null);
-    const [selectedStockSymbol, setSelectedStockSymbol] = useState('ZPOG');
+    const [selectedStockSymbol, setSelectedStockSymbol] = useState('ADIN');
+    const [rsiValue, setRsiValue] = useState(null);
 
     useEffect(() => {
         const fetchStockSymbols = async () => {
@@ -25,6 +26,28 @@ const Analyze = () => {
 
         fetchStockSymbols();
     }, []);
+
+    const fetchRsiValue = async () => {
+        try {
+            const response = await fetch(`http://localhost:8080/api/rsi?symbol=${selectedStockSymbol}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch RSI value');
+            }
+            const data = await response.json();
+            setRsiValue(data);
+            console.log(rsiValue);
+        } catch (error) {
+            setError(error.message);
+        }
+    };
+
+    useEffect(() => {
+        if (selectedStockSymbol) {
+            console.log(`Fetching RSI for symbol: ${selectedStockSymbol}`);
+            fetchRsiValue();
+        }
+    }, [selectedStockSymbol]);
+
     return (
         <>
             <nav className="navbar">
@@ -51,6 +74,14 @@ const Analyze = () => {
                         </option>
                     ))}
                 </select>
+
+
+                <div style={{float: "left"}}>
+                    <div>
+                        {rsiValue !== null ? `RSI Index: ${rsiValue}` : error ? `Error: ${error}` : "Loading..."}
+                    </div>
+                </div>
+
 
             </div>
 
