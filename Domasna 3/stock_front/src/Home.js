@@ -13,7 +13,7 @@ const Home = () => {
                     <Link to="/stock-market">Stock market</Link>
                     <Link to="/Analyze">Analyze</Link>
                     <Link to="/Login">Login</Link>
-                    {/*<Link to="/register" className="highlighted-link">Регистрација</Link>*/}
+                    <Link to="/Register">Register</Link>
                 </div>
             </nav>
 

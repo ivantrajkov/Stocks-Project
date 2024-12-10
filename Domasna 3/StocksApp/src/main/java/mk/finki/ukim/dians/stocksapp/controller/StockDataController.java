@@ -1,9 +1,11 @@
 package mk.finki.ukim.dians.stocksapp.controller;
 
 import mk.finki.ukim.dians.stocksapp.model.StockData;
+import mk.finki.ukim.dians.stocksapp.model.User;
 import mk.finki.ukim.dians.stocksapp.repository.StockRepository;
 import mk.finki.ukim.dians.stocksapp.service.StockAnalysisService;
 import mk.finki.ukim.dians.stocksapp.service.StockService;
+import mk.finki.ukim.dians.stocksapp.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -24,11 +26,13 @@ public class StockDataController {
     private final StockService stockService;
     private final StockRepository stockRepository;
     private final StockAnalysisService stockAnalysisService;
+    private final UserService userService;
 
-    public StockDataController(StockService stockService, StockRepository stockRepository, StockAnalysisService stockAnalysisService) {
+    public StockDataController(StockService stockService, StockRepository stockRepository, StockAnalysisService stockAnalysisService, UserService userService) {
         this.stockService = stockService;
         this.stockRepository = stockRepository;
         this.stockAnalysisService = stockAnalysisService;
+        this.userService = userService;
     }
 
 @GetMapping("/all")
@@ -100,5 +104,14 @@ public ResponseEntity<List<StockData>> listAll(
 
         return new ResponseEntity<>(rsiIndex,HttpStatus.OK);
     }
+    @PostMapping("/register")
+    public ResponseEntity<?> register(
+            @RequestParam String username,
+            @RequestParam String password
+    ){
+        User user = new User(username, password);
+        userService.addUser(user);
 
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
