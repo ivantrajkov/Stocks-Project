@@ -43,6 +43,7 @@ const StockGraph = () => {
                     <Link to="/">Home</Link>
                     <Link to="/stock-market">Stock market</Link>
                     <Link to="/login">Login</Link>
+                    <Link to="/Register">Register</Link>
                 </div>
             </nav>
             <ResponsiveContainer width="100%" height={400}>

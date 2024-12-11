@@ -98,8 +98,9 @@ const StockMarket = () => {
                 <div>
                     <Link to="/">Home</Link>
                     <Link to="/stock-market" style={{ backgroundColor: '#d3d3d3' }}>Stock market</Link>
-                    <Link to="/analysis">Analyze</Link>
+                    <Link to="/analyze">Analyze</Link>
                     <Link to="/login">Login</Link>
+                    <Link to="/Register">Register</Link>
                 </div>
             </nav>
 

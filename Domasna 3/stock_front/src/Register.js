@@ -25,11 +25,15 @@ const Register = () => {
             }
 
             const data = await response.json();
-            alert("Registration successful");
+            if (data.redirect) {
+                alert("Registration successful");
+                window.location.href = data.redirect;
+            }
         } catch (error) {
             alert(error.message);
         }
     };
+
 
 
     return (

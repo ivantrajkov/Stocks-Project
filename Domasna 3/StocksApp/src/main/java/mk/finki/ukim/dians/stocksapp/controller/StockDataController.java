@@ -105,13 +105,48 @@ public ResponseEntity<List<StockData>> listAll(
         return new ResponseEntity<>(rsiIndex,HttpStatus.OK);
     }
     @PostMapping("/register")
-    public ResponseEntity<?> register(
+    public ResponseEntity<Map<String, String>> register(
             @RequestParam String username,
             @RequestParam String password
-    ){
+    ) {
         User user = new User(username, password);
         userService.addUser(user);
-
-        return new ResponseEntity<>(HttpStatus.OK);
+        Map<String, String> response = new HashMap<>();
+        response.put("redirect", "/login");
+        return ResponseEntity.ok(response);
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(
+            @RequestParam String username,
+            @RequestParam String password
+    ) {
+        Optional<User> userOpt = Optional.ofNullable(userService.isLoggedIn());
+        if(userOpt.isPresent()){
+            User user = userOpt.get();
+            user.setLoggedIn(false);
+            userService.addUser(user);
+        }
+        return userService.getByUsername(username)
+                .map(user -> {
+                    if (user.getPassword().equals(password)) {
+                        user.setLoggedIn(true);
+                        userService.addUser(user);
+                        return ResponseEntity.ok("Login successful");
+                    }
+                    return ResponseEntity.badRequest().body("Invalid password");
+                })
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found"));
+    }
+
+    @GetMapping("/loggedIn")
+    public ResponseEntity<String> getLoggedInfo(){
+        User user = userService.isLoggedIn();
+        if(user == null){
+            return new ResponseEntity<>("Guest",HttpStatus.OK);
+        } else {
+
+        }return new ResponseEntity<>(user.getUsername(),HttpStatus.OK);
+    }
+
 }
