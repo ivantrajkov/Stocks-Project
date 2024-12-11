@@ -9,24 +9,13 @@ import java.util.List;
 
 @Service
 public class StockAnalysisServiceImpl implements StockAnalysisService {
-    @Override
-    public BigDecimal calculateRSI(List<BigDecimal> prices) {
-        BigDecimal rsi1D = calculateRSIForPeriod(prices, 1);
-
-        BigDecimal rsi1W = calculateRSIForPeriod(prices, 7);
-
-        BigDecimal rsi1M = calculateRSIForPeriod(prices, 30);
-
-        BigDecimal combinedRSI = rsi1D.add(rsi1W).add(rsi1M).divide(BigDecimal.valueOf(3), RoundingMode.HALF_UP);
-
-        return combinedRSI;
-    }
 
     @Override
-    public BigDecimal calculateRSIForPeriod(List<BigDecimal> prices, int period) {
+    public BigDecimal calculateRSI(List<BigDecimal> prices, int period) {
         if (prices == null || prices.size() < period + 1) {
             throw new IllegalArgumentException("Not enough data points to calculate RSI for the given period.");
         }
+
 
         BigDecimal gain = BigDecimal.ZERO;
         BigDecimal loss = BigDecimal.ZERO;
@@ -40,7 +29,6 @@ public class StockAnalysisServiceImpl implements StockAnalysisService {
             }
         }
 
-        // Initial average gain and loss
         BigDecimal avgGain = gain.divide(BigDecimal.valueOf(period), RoundingMode.HALF_UP);
         BigDecimal avgLoss = loss.divide(BigDecimal.valueOf(period), RoundingMode.HALF_UP);
 
@@ -61,11 +49,54 @@ public class StockAnalysisServiceImpl implements StockAnalysisService {
             return BigDecimal.valueOf(100);
         }
 
-        // Calculate relative strength (RS) and final RSI value
         BigDecimal rs = avgGain.divide(avgLoss, RoundingMode.HALF_UP);
         return BigDecimal.valueOf(100)
                 .subtract(BigDecimal.valueOf(100)
                         .divide(BigDecimal.ONE.add(rs), RoundingMode.HALF_UP));
     }
+
+    @Override
+    public BigDecimal calculateStochasticK(List<BigDecimal> prices, int period) {
+        if (prices == null || prices.size() < period + 1) {
+            throw new IllegalArgumentException("Not enough data points to calculate Stochastic Oscillator for the given period.");
+        }
+
+
+        BigDecimal highestHigh = getHighestHigh(prices, period);
+        BigDecimal lowestLow = getLowestLow(prices, period);
+        BigDecimal currentClose = prices.get(prices.size() - 1);
+
+        if (highestHigh.compareTo(lowestLow) == 0) {
+            return BigDecimal.ZERO;
+        }
+
+        BigDecimal stochasticK = currentClose.subtract(lowestLow)
+                .divide(highestHigh.subtract(lowestLow), RoundingMode.HALF_UP)
+                .multiply(BigDecimal.valueOf(100));
+
+        return stochasticK;
+    }
+
+    private BigDecimal getHighestHigh(List<BigDecimal> prices, int period) {
+        BigDecimal highestHigh = prices.get(prices.size() - period);
+        for (int i = prices.size() - period + 1; i < prices.size(); i++) {
+            if (prices.get(i).compareTo(highestHigh) > 0) {
+                highestHigh = prices.get(i);
+            }
+        }
+        return highestHigh;
+    }
+
+
+    private BigDecimal getLowestLow(List<BigDecimal> prices, int period) {
+        BigDecimal lowestLow = prices.get(prices.size() - period);
+        for (int i = prices.size() - period + 1; i < prices.size(); i++) {
+            if (prices.get(i).compareTo(lowestLow) < 0) {
+                lowestLow = prices.get(i);
+            }
+        }
+        return lowestLow;
+    }
+
 
 }

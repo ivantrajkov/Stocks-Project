@@ -4,6 +4,6 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public interface StockAnalysisService {
-    BigDecimal calculateRSIForPeriod(List<BigDecimal> prices, int period);
-    public BigDecimal calculateRSI(List<BigDecimal> prices);
+    BigDecimal calculateRSI(List<BigDecimal> prices, int period);
+    BigDecimal calculateStochasticK(List<BigDecimal> prices, int period);
 }

@@ -94,16 +94,34 @@ public ResponseEntity<List<StockData>> listAll(
 
     }
     @GetMapping("/rsi")
-    public ResponseEntity<BigDecimal> getRsi(@RequestParam String symbol){
+    public ResponseEntity<BigDecimal> getRsi(
+            @RequestParam String symbol,
+            @RequestParam int period
+    ){
         List<StockData> listData = stockService.getByStockSymbol(symbol);
         List<BigDecimal> prices = listData.stream()
                 .map(StockData::getLastTransactionPrice)
                 .collect(Collectors.toList());
-        prices.forEach(System.out::println);
-        BigDecimal rsiIndex = stockAnalysisService.calculateRSI(prices);
+
+        BigDecimal rsiIndex = stockAnalysisService.calculateRSI(prices,period);
 
         return new ResponseEntity<>(rsiIndex,HttpStatus.OK);
     }
+
+    @GetMapping("/stochastic")
+    public ResponseEntity<BigDecimal> getStochastic(
+            @RequestParam String symbol,
+            @RequestParam int period
+    ) {
+        List<StockData> listData = stockService.getByStockSymbol(symbol);
+        List<BigDecimal> prices = listData.stream()
+                .map(StockData::getLastTransactionPrice)
+                .collect(Collectors.toList());
+        BigDecimal stochasticK = stockAnalysisService.calculateStochasticK(prices,period);
+        return new ResponseEntity<>(stochasticK,HttpStatus.OK);
+    }
+
+
     @PostMapping("/register")
     public ResponseEntity<Map<String, String>> register(
             @RequestParam String username,

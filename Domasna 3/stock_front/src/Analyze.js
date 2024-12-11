@@ -9,6 +9,8 @@ const Analyze = () => {
     const [error, setError] = useState(null);
     const [selectedStockSymbol, setSelectedStockSymbol] = useState('ADIN');
     const [rsiValue, setRsiValue] = useState(null);
+    const [period, setPeriod] = useState(1);
+    const [stochastic, setStochastic] = useState(null);
 
     useEffect(() => {
         const fetchStockSymbols = async () => {
@@ -29,7 +31,7 @@ const Analyze = () => {
 
     const fetchRsiValue = async () => {
         try {
-            const response = await fetch(`http://localhost:8080/api/rsi?symbol=${selectedStockSymbol}`);
+            const response = await fetch(`http://localhost:8080/api/rsi?symbol=${selectedStockSymbol}&period=${period}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch RSI value');
             }
@@ -40,13 +42,25 @@ const Analyze = () => {
             setError(error.message);
         }
     };
+    const fetchStochasticValue = async () => {
+        try {
+            const response = await fetch(`http://localhost:8080/api/stochastic?symbol=${selectedStockSymbol}&period=${period}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch stochatic %K value');
+            }
+            const data = await response.json();
+            setStochastic(data);
+        } catch (error) {
+            setError(error.message);
+        }
+    };
 
     useEffect(() => {
-        if (selectedStockSymbol) {
-            console.log(`Fetching RSI for symbol: ${selectedStockSymbol}`);
+        if (selectedStockSymbol || period){
             fetchRsiValue();
+            fetchStochasticValue();
         }
-    }, [selectedStockSymbol]);
+    }, [selectedStockSymbol,period,stochastic]);
 
     return (
         <>
@@ -61,24 +75,40 @@ const Analyze = () => {
                 </div>
             </nav>
             <div className={"hero"}>
-                <h3>Choose a stock to analyze</h3>
-                <select
-                    value={selectedStockSymbol}
-                    onChange={(e) => {
-                        setSelectedStockSymbol(e.target.value);
-                    }}
-                >
-                    {stockSymbols.map((symbol, index) => (
-                        <option key={index} value={symbol}>
-                            {symbol}
-                        </option>
-                    ))}
-                </select>
+                <div className={"optionContainer"}>
+                    <h3>Choose a stock to analyze</h3>
+                    <select
+                        value={selectedStockSymbol}
+                        onChange={(e) => {
+                            setSelectedStockSymbol(e.target.value);
+                        }}
+                    >
+                        {stockSymbols.map((symbol, index) => (
+                            <option key={index} value={symbol}>
+                                {symbol}
+                            </option>
+                        ))}
+                    </select>
+                    <h5>Select a period of time in days:</h5>
+                    <select onChange={(e) => {
+                        setPeriod(parseInt(e.target.value));
+                    }}>
+                        <option>1</option>
+                        <option>7</option>
+                        <option>30</option>
+                    </select>
+                </div>
 
 
                 <div style={{float: "left"}}>
                     <div>
-                        {rsiValue !== null ? `RSI Index: ${rsiValue}` : error ? `Error: ${error}` : "Loading..."}
+                        {rsiValue !== null ? `RSI Index for ${period} day(s): ${rsiValue}` : error ? `Error: ${error}` : "Loading..."}
+                    </div>
+                </div>
+                <br/>
+                <div style={{float: "left"}}>
+                    <div>
+                        {stochastic !== null ? `Stochastic %K for ${period} day(s): ${stochastic}` : error ? `Error: ${error}` : "Loading..."}
                     </div>
                 </div>
 
