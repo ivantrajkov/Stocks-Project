@@ -14,6 +14,7 @@ const Analyze = () => {
     const [roc, setRoc] = useState(null);
     const [momentum, setMomentum] = useState(null);
     const [sma,setSma] = useState(null);
+    const [cmo, setCmo] = useState(null);
 
     useEffect(() => {
         const fetchStockSymbols = async () => {
@@ -93,6 +94,18 @@ const Analyze = () => {
             setError(error.message);
         }
     };
+    const fetchCMO = async () => {
+        try {
+            const response = await fetch(`http://localhost:8080/api/cmo?symbol=${selectedStockSymbol}&period=${period}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch rate of change value');
+            }
+            const data = await response.json();
+            setCmo(data);
+        } catch (error) {
+            setError(error.message);
+        }
+    };
 
     useEffect(() => {
         if (selectedStockSymbol || period){
@@ -101,8 +114,9 @@ const Analyze = () => {
             fetchRateOfChange();
             fetchMomentum();
             fetchSimpleMovingAverage();
+            fetchCMO();
         }
-    }, [selectedStockSymbol,period,stochastic,roc,momentum,sma]);
+    }, [selectedStockSymbol,period,stochastic,roc,momentum,sma,cmo]);
 
     return (
         <>
@@ -169,6 +183,12 @@ const Analyze = () => {
                 <div style={{float: "left"}}>
                     <div>
                         {sma !== null ? `Simple moving average for ${period} day(s): ${sma}` : error ? `Error: ${error}` : "Loading..."}
+                    </div>
+                </div>
+                <br/>
+                <div style={{float: "left"}}>
+                    <div>
+                        {cmo !== null ? `Chande momentum oscillator for ${period} day(s): ${cmo}` : error ? `Error: ${error}` : "Loading..."}
                     </div>
                 </div>
 

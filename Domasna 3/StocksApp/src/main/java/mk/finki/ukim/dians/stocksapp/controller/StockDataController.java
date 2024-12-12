@@ -205,6 +205,18 @@ public ResponseEntity<List<StockData>> listAll(
         BigDecimal sma = stockAnalysisService.calculateSMAOscillator(prices,period);
         return new ResponseEntity<>(sma,HttpStatus.OK);
     }
+    @GetMapping("/cmo")
+    public ResponseEntity<BigDecimal> getCMO(
+            @RequestParam String symbol,
+            @RequestParam int period
+    ){
+        List<StockData> listData = stockService.getByStockSymbol(symbol);
+        List<BigDecimal> prices = listData.stream()
+                .map(StockData::getLastTransactionPrice)
+                .collect(Collectors.toList());
+        BigDecimal cmo = stockAnalysisService.calculateCMO(prices,period);
+        return new ResponseEntity<>(cmo,HttpStatus.OK);
+    }
 
 
 }

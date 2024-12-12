@@ -9,4 +9,5 @@ public interface StockAnalysisService {
     BigDecimal calculateROC(List<BigDecimal> closingPrices, int period);
     BigDecimal calculateMomentum(List<BigDecimal> closingPrices, int period);
     BigDecimal calculateSMAOscillator(List<BigDecimal> closingPrices, int period);
+    BigDecimal calculateCMO(List<BigDecimal> closingPrices, int period);
 }

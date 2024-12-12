@@ -147,4 +147,30 @@ public class StockAnalysisServiceImpl implements StockAnalysisService {
         return currentClose.subtract(sma);
     }
 
+    @Override
+    public BigDecimal calculateCMO(List<BigDecimal> closingPrices, int period) {
+        if (closingPrices == null || closingPrices.size() < period + 1) {
+            throw new IllegalArgumentException("Not enough data points to calculate CMO for the given period.");
+        }
+
+        BigDecimal sumGains = BigDecimal.ZERO;
+        BigDecimal sumLosses = BigDecimal.ZERO;
+
+        for (int i = closingPrices.size() - period; i < closingPrices.size() - 1; i++) {
+            BigDecimal change = closingPrices.get(i + 1).subtract(closingPrices.get(i));
+
+            if (change.compareTo(BigDecimal.ZERO) > 0) {
+                sumGains = sumGains.add(change);
+            } else {
+                sumLosses = sumLosses.add(change.abs());
+            }
+        }
+
+        BigDecimal cmo = sumGains.subtract(sumLosses)
+                .divide(sumGains.add(sumLosses), RoundingMode.HALF_UP)
+                .multiply(BigDecimal.valueOf(100));
+
+        return cmo;
+    }
+
 }
