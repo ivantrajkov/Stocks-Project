@@ -98,5 +98,53 @@ public class StockAnalysisServiceImpl implements StockAnalysisService {
         return lowestLow;
     }
 
+    @Override
+    public BigDecimal calculateROC(List<BigDecimal> closingPrices, int period) {
+        if (closingPrices == null || closingPrices.size() < period + 1) {
+            throw new IllegalArgumentException("Not enough data points to calculate ROC for the given period.");
+        }
+
+        BigDecimal currentClose = closingPrices.get(closingPrices.size() - 1);
+        BigDecimal pastClose = closingPrices.get(closingPrices.size() - 1 - period);
+
+        if (pastClose.compareTo(BigDecimal.ZERO) == 0) {
+            return null;
+        }
+
+        return currentClose.subtract(pastClose)
+                .divide(pastClose, RoundingMode.HALF_UP)
+                .multiply(BigDecimal.valueOf(100));
+    }
+
+    @Override
+    public BigDecimal calculateMomentum(List<BigDecimal> closingPrices, int period) {
+        if (closingPrices == null || closingPrices.size() < period + 1) {
+            throw new IllegalArgumentException("Not enough data points to calculate Momentum for the given period.");
+        }
+
+        BigDecimal currentClose = closingPrices.get(closingPrices.size() - 1);
+        BigDecimal pastClose = closingPrices.get(closingPrices.size() - 1 - period);
+
+        return currentClose.subtract(pastClose);
+    }
+
+    @Override
+    public BigDecimal calculateSMAOscillator(List<BigDecimal> closingPrices, int period) {
+        if (closingPrices == null || closingPrices.size() < period) {
+            throw new IllegalArgumentException("Not enough data points to calculate SMA Oscillator for the given period.");
+        }
+
+        BigDecimal sum = BigDecimal.ZERO;
+        for (int i = closingPrices.size() - period; i < closingPrices.size(); i++) {
+            sum = sum.add(closingPrices.get(i));
+        }
+        BigDecimal sma = sum.divide(BigDecimal.valueOf(period), RoundingMode.HALF_UP);
+
+        BigDecimal currentClose = closingPrices.get(closingPrices.size() - 1);
+        closingPrices = closingPrices.stream().limit(period).toList();
+        System.out.println(closingPrices);
+
+        return currentClose.subtract(sma);
+    }
 
 }

@@ -166,5 +166,45 @@ public ResponseEntity<List<StockData>> listAll(
 
         }return new ResponseEntity<>(user.getUsername(),HttpStatus.OK);
     }
+    @GetMapping("/roc")
+    public ResponseEntity<BigDecimal> getRoc(
+            @RequestParam String symbol,
+            @RequestParam int period
+    ){
+        List<StockData> listData = stockService.getByStockSymbol(symbol);
+        List<BigDecimal> prices = listData.stream()
+                .map(StockData::getLastTransactionPrice)
+                .collect(Collectors.toList());
+        BigDecimal roc = stockAnalysisService.calculateROC(prices,period);
+        return new ResponseEntity<>(roc,HttpStatus.OK);
+    }
+
+
+    @GetMapping("/momentum")
+    public ResponseEntity<BigDecimal> getMomentum(
+            @RequestParam String symbol,
+            @RequestParam int period
+    ){
+        List<StockData> listData = stockService.getByStockSymbol(symbol);
+        List<BigDecimal> prices = listData.stream()
+                .map(StockData::getLastTransactionPrice)
+                .collect(Collectors.toList());
+        BigDecimal momentum = stockAnalysisService.calculateMomentum(prices,period);
+        return new ResponseEntity<>(momentum,HttpStatus.OK);
+    }
+
+    @GetMapping("/sma")
+    public ResponseEntity<BigDecimal> getSimpleMovingAverage(
+            @RequestParam String symbol,
+            @RequestParam int period
+    ){
+        List<StockData> listData = stockService.getByStockSymbol(symbol);
+        List<BigDecimal> prices = listData.stream()
+                .map(StockData::getLastTransactionPrice)
+                .collect(Collectors.toList());
+        BigDecimal sma = stockAnalysisService.calculateSMAOscillator(prices,period);
+        return new ResponseEntity<>(sma,HttpStatus.OK);
+    }
+
 
 }

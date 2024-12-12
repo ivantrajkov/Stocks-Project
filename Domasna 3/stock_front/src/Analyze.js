@@ -11,6 +11,9 @@ const Analyze = () => {
     const [rsiValue, setRsiValue] = useState(null);
     const [period, setPeriod] = useState(1);
     const [stochastic, setStochastic] = useState(null);
+    const [roc, setRoc] = useState(null);
+    const [momentum, setMomentum] = useState(null);
+    const [sma,setSma] = useState(null);
 
     useEffect(() => {
         const fetchStockSymbols = async () => {
@@ -54,13 +57,52 @@ const Analyze = () => {
             setError(error.message);
         }
     };
+    const fetchRateOfChange = async () => {
+        try {
+            const response = await fetch(`http://localhost:8080/api/roc?symbol=${selectedStockSymbol}&period=${period}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch rate of change value');
+            }
+            const data = await response.json();
+            setRoc(data);
+        } catch (error) {
+            setError(error.message);
+        }
+    };
+    const fetchMomentum = async () => {
+        try {
+            const response = await fetch(`http://localhost:8080/api/roc?symbol=${selectedStockSymbol}&period=${period}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch rate of change value');
+            }
+            const data = await response.json();
+            setMomentum(data);
+        } catch (error) {
+            setError(error.message);
+        }
+    };
+    const fetchSimpleMovingAverage = async () => {
+        try {
+            const response = await fetch(`http://localhost:8080/api/sma?symbol=${selectedStockSymbol}&period=${period}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch rate of change value');
+            }
+            const data = await response.json();
+            setSma(data);
+        } catch (error) {
+            setError(error.message);
+        }
+    };
 
     useEffect(() => {
         if (selectedStockSymbol || period){
             fetchRsiValue();
             fetchStochasticValue();
+            fetchRateOfChange();
+            fetchMomentum();
+            fetchSimpleMovingAverage();
         }
-    }, [selectedStockSymbol,period,stochastic]);
+    }, [selectedStockSymbol,period,stochastic,roc,momentum,sma]);
 
     return (
         <>
@@ -109,6 +151,24 @@ const Analyze = () => {
                 <div style={{float: "left"}}>
                     <div>
                         {stochastic !== null ? `Stochastic %K for ${period} day(s): ${stochastic}` : error ? `Error: ${error}` : "Loading..."}
+                    </div>
+                </div>
+                <br/>
+                <div style={{float: "left"}}>
+                    <div>
+                        {roc !== null ? `Rate of change for ${period} day(s): ${roc}%` : error ? `Error: ${error}` : "Loading..."}
+                    </div>
+                </div>
+                <br/>
+                <div style={{float: "left"}}>
+                    <div>
+                        {momentum !== null ? `Momentum for ${period} day(s): ${momentum}` : error ? `Error: ${error}` : "Loading..."}
+                    </div>
+                </div>
+                <br/>
+                <div style={{float: "left"}}>
+                    <div>
+                        {sma !== null ? `Simple moving average for ${period} day(s): ${sma}` : error ? `Error: ${error}` : "Loading..."}
                     </div>
                 </div>
 
