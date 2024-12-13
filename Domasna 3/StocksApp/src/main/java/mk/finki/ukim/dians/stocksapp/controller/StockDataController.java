@@ -217,6 +217,55 @@ public ResponseEntity<List<StockData>> listAll(
         BigDecimal cmo = stockAnalysisService.calculateCMO(prices,period);
         return new ResponseEntity<>(cmo,HttpStatus.OK);
     }
+    @GetMapping("/ema")
+    public ResponseEntity<BigDecimal> getEMA(
+            @RequestParam String symbol,
+            @RequestParam int period
+    ){
+        List<StockData> listData = stockService.getByStockSymbol(symbol);
+        List<BigDecimal> prices = listData.stream()
+                .map(StockData::getLastTransactionPrice)
+                .collect(Collectors.toList());
+        BigDecimal ema = stockAnalysisService.calculateEMA(prices,period);
+        return new ResponseEntity<>(ema,HttpStatus.OK);
+    }
+
+    @GetMapping("/wma")
+    public ResponseEntity<BigDecimal> getWMA(
+            @RequestParam String symbol,
+            @RequestParam int period
+    ){
+        List<StockData> listData = stockService.getByStockSymbol(symbol);
+        List<BigDecimal> prices = listData.stream()
+                .map(StockData::getLastTransactionPrice)
+                .collect(Collectors.toList());
+        BigDecimal wma = stockAnalysisService.calculateWMA(prices,period);
+        return new ResponseEntity<>(wma,HttpStatus.OK);
+    }
+    @GetMapping("/tma")
+    public ResponseEntity<BigDecimal> getTMA(
+            @RequestParam String symbol,
+            @RequestParam int period
+    ){
+        List<StockData> listData = stockService.getByStockSymbol(symbol);
+        List<BigDecimal> prices = listData.stream()
+                .map(StockData::getLastTransactionPrice)
+                .collect(Collectors.toList());
+        BigDecimal tma = stockAnalysisService.calculateTMA(prices,period);
+        return new ResponseEntity<>(tma,HttpStatus.OK);
+    }
+    @GetMapping("/kama")
+    public ResponseEntity<BigDecimal> getKAMA(
+            @RequestParam String symbol,
+            @RequestParam int period
+    ){
+        List<StockData> listData = stockService.getByStockSymbol(symbol);
+        List<BigDecimal> prices = listData.stream()
+                .map(StockData::getLastTransactionPrice)
+                .collect(Collectors.toList());
+        BigDecimal tma = stockAnalysisService.calculateKAMA(prices,period);
+        return new ResponseEntity<>(tma,HttpStatus.OK);
+    }
 
 
 }

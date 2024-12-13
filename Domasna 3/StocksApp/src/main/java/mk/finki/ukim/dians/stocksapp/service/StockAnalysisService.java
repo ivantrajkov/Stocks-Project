@@ -10,4 +10,8 @@ public interface StockAnalysisService {
     BigDecimal calculateMomentum(List<BigDecimal> closingPrices, int period);
     BigDecimal calculateSMAOscillator(List<BigDecimal> closingPrices, int period);
     BigDecimal calculateCMO(List<BigDecimal> closingPrices, int period);
+    BigDecimal calculateEMA(List<BigDecimal> prices, int period);
+    BigDecimal calculateWMA(List<BigDecimal> prices, int period);
+    BigDecimal calculateTMA(List<BigDecimal> prices, int period);
+    BigDecimal calculateKAMA(List<BigDecimal> prices, int period);
 }

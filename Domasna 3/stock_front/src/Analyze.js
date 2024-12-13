@@ -15,6 +15,10 @@ const Analyze = () => {
     const [momentum, setMomentum] = useState(null);
     const [sma,setSma] = useState(null);
     const [cmo, setCmo] = useState(null);
+    const [ema, setEma] = useState(null);
+    const [wma,setWma] = useState(null);
+    const [tma,setTma] = useState(null);
+    const [kama,setKama] = useState(null);
 
     useEffect(() => {
         const fetchStockSymbols = async () => {
@@ -106,6 +110,58 @@ const Analyze = () => {
             setError(error.message);
         }
     };
+    const fetchEMA = async () => {
+        try {
+            const response = await fetch(`http://localhost:8080/api/ema?symbol=${selectedStockSymbol}&period=${period}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch EMA value');
+            }
+            const data = await response.json();
+            setEma(data);
+            console.log(rsiValue);
+        } catch (error) {
+            setError(error.message);
+        }
+    };
+    const fetchWMA = async () => {
+        try {
+            const response = await fetch(`http://localhost:8080/api/wma?symbol=${selectedStockSymbol}&period=${period}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch EMA value');
+            }
+            const data = await response.json();
+            setWma(data);
+            console.log(rsiValue);
+        } catch (error) {
+            setError(error.message);
+        }
+    };
+    const fetchTMA = async () => {
+        try {
+            const response = await fetch(`http://localhost:8080/api/tma?symbol=${selectedStockSymbol}&period=${period}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch EMA value');
+            }
+            const data = await response.json();
+            setTma(data);
+            console.log(rsiValue);
+        } catch (error) {
+            setError(error.message);
+        }
+    };
+    const fetchKAMA = async () => {
+        try {
+            const response = await fetch(`http://localhost:8080/api/kama?symbol=${selectedStockSymbol}&period=${period}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch EMA value');
+            }
+            const data = await response.json();
+            setKama(data);
+            console.log(rsiValue);
+        } catch (error) {
+            setError(error.message);
+        }
+    };
 
     useEffect(() => {
         if (selectedStockSymbol || period){
@@ -115,8 +171,13 @@ const Analyze = () => {
             fetchMomentum();
             fetchSimpleMovingAverage();
             fetchCMO();
+            fetchEMA();
+            fetchWMA();
+            fetchTMA();
+            fetchKAMA();
+
         }
-    }, [selectedStockSymbol,period,stochastic,roc,momentum,sma,cmo]);
+    }, [selectedStockSymbol,period,stochastic,roc,momentum,sma,cmo,ema,wma,tma,kama]);
 
     return (
         <>
@@ -189,6 +250,30 @@ const Analyze = () => {
                 <div style={{float: "left"}}>
                     <div>
                         {cmo !== null ? `Chande momentum oscillator for ${period} day(s): ${cmo}` : error ? `Error: ${error}` : "Loading..."}
+                    </div>
+                </div>
+                <br/>
+                <div style={{float: "left"}}>
+                    <div>
+                        {ema !== null ? `Exponential moving average for ${period} day(s): ${ema}` : error ? `Error: ${error}` : "Loading..."}
+                    </div>
+                </div>
+                <br/>
+                <div style={{float: "left"}}>
+                    <div>
+                        {wma !== null ? `Weighted moving average for ${period} day(s): ${wma}` : error ? `Error: ${error}` : "Loading..."}
+                    </div>
+                </div>
+                <br/>
+                <div style={{float: "left"}}>
+                    <div>
+                        {tma !== null ? `TMA for ${period} day(s): ${tma}` : error ? `Error: ${error}` : "Loading..."}
+                    </div>
+                </div>
+                <br/>
+                <div style={{float: "left"}}>
+                    <div>
+                        {kama !== null ? `KAMA for ${period} day(s): ${kama}` : error ? `Error: ${error}` : "Loading..."}
                     </div>
                 </div>
 

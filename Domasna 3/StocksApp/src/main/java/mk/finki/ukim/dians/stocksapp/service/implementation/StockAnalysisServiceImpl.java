@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -172,5 +173,78 @@ public class StockAnalysisServiceImpl implements StockAnalysisService {
 
         return cmo;
     }
+
+    @Override
+    public BigDecimal calculateEMA(List<BigDecimal> prices, int period) {
+        if (prices == null || prices.size() < period) {
+            throw new IllegalArgumentException("Not enough data points to calculate EMA.");
+        }
+        BigDecimal multiplier = BigDecimal.valueOf(2.0 / (period + 1));
+        BigDecimal ema = calculateSMAOscillator(prices.subList(0, period), period);
+        for (int i = period; i < prices.size(); i++) {
+            ema = prices.get(i).subtract(ema).multiply(multiplier).add(ema);
+        }
+        return ema.setScale(2, RoundingMode.HALF_UP);
+    }
+
+    @Override
+    public BigDecimal calculateWMA(List<BigDecimal> prices, int period) {
+        if (prices == null || prices.size() < period) {
+            throw new IllegalArgumentException("Not enough data points to calculate WMA.");
+        }
+        BigDecimal weightedSum = BigDecimal.ZERO;
+        int weight = 0;
+        for (int i = prices.size() - period; i < prices.size(); i++) {
+            weight += (i - (prices.size() - period) + 1);
+            weightedSum = weightedSum.add(prices.get(i).multiply(BigDecimal.valueOf(i - (prices.size() - period) + 1)));
+        }
+        return weightedSum.divide(BigDecimal.valueOf(weight), RoundingMode.HALF_UP);
+    }
+
+    @Override
+    public BigDecimal calculateTMA(List<BigDecimal> prices, int period) {
+        if (prices == null || prices.size() < period) {
+            throw new IllegalArgumentException("Not enough data points to calculate TMA.");
+        }
+
+        List<BigDecimal> firstSMAValues = prices.subList(prices.size() - period, prices.size());
+        BigDecimal firstSMA = calculateSMAOscillator(firstSMAValues, period);
+
+        List<BigDecimal> secondSMAValues = new ArrayList<>();
+        secondSMAValues.add(firstSMA);
+        System.out.println("TMA IS " + calculateSMAOscillator(secondSMAValues, period));
+        return calculateSMAOscillator(secondSMAValues, period);
+    }
+
+    @Override
+    public BigDecimal calculateKAMA(List<BigDecimal> prices, int period) {
+        if (prices == null || prices.size() < period + 1) {
+            throw new IllegalArgumentException("Not enough data points to calculate KAMA.");
+        }
+
+        BigDecimal sumPriceChanges = BigDecimal.ZERO;
+        BigDecimal absolutePriceChange = prices.get(prices.size() - 1).subtract(prices.get(prices.size() - period));
+
+        for (int i = prices.size() - period; i < prices.size() - 1; i++) {
+            sumPriceChanges = sumPriceChanges.add(prices.get(i + 1).subtract(prices.get(i)).abs());
+        }
+
+        BigDecimal efficiencyRatio = sumPriceChanges.compareTo(BigDecimal.ZERO) == 0 ? BigDecimal.ZERO : absolutePriceChange.abs().divide(sumPriceChanges, RoundingMode.HALF_UP);
+
+        BigDecimal fastestConstant = BigDecimal.valueOf(2).divide(BigDecimal.valueOf(period + 1), RoundingMode.HALF_UP);
+        BigDecimal slowestConstant = BigDecimal.valueOf(2).divide(BigDecimal.valueOf(period * 2 + 1), RoundingMode.HALF_UP);
+
+        BigDecimal smoothingConstant = efficiencyRatio.multiply(fastestConstant.subtract(slowestConstant)).add(slowestConstant);
+
+        BigDecimal kama = prices.get(prices.size() - period);
+
+        for (int i = prices.size() - period + 1; i < prices.size(); i++) {
+            BigDecimal price = prices.get(i);
+            kama = kama.add(smoothingConstant.multiply(price.subtract(kama)));
+        }
+
+        return kama.setScale(2, RoundingMode.HALF_UP);
+    }
+
 
 }
