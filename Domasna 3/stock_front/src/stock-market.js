@@ -15,6 +15,16 @@ const StockMarket = () => {
     const [fromDateFilter, setFromDateFilter] = useState('');
     const [toDateFilter, setToDateFilter] = useState('');
 
+    const reverseDateFormat = (date) => {
+        const [year, month, day] = date.split('-');
+        return `${day}.${month}.${year}`;
+    };
+
+    const formatNumber = (number) => {
+        return new Intl.NumberFormat('mk-MK').format(number);
+    };
+
+
     useEffect(() => {
         const fetchStockSymbols = async () => {
             try {
@@ -77,15 +87,15 @@ const StockMarket = () => {
         const rowsToDisplay = filteredData.slice(0, 50);
         return rowsToDisplay.map((row, index) => (
             <tr key={index}>
-                <td>{row.date}</td>
-                <td>{row.lastTransactionPrice}</td>
-                <td>{row.maxPrice}</td>
-                <td>{row.minPrice}</td>
-                <td>{row.averagePrice}</td>
-                <td>{row.percentageChange}</td>
-                <td>{row.quantity}</td>
-                <td>{row.bestTurnover}</td>
-                <td>{row.totalTurnover}</td>
+                <td>{reverseDateFormat(row.date)}</td>
+                <td>{formatNumber(row.lastTransactionPrice)}</td>
+                <td>{formatNumber(row.maxPrice)}</td>
+                <td>{formatNumber(row.minPrice)}</td>
+                <td>{formatNumber(row.averagePrice)}</td>
+                <td>{formatNumber(row.percentageChange)}</td>
+                <td>{formatNumber(row.quantity)}</td>
+                <td>{formatNumber(row.bestTurnover)}</td>
+                <td>{formatNumber(row.totalTurnover)}</td>
                 <td>{row.stockSymbol}</td>
             </tr>
         ));
@@ -132,7 +142,7 @@ const StockMarket = () => {
                         onChange={(e) => setToDateFilter(e.target.value)}
                     />
                     <button onClick={handleFilter}>Filter</button>
-                    <div style={{float: 'right', marginRight: '100px'}}>
+                    <div style={{float: 'right', marginRight: '100px', marginLeft: '10px'}}>
                         <h3>Choose a stock to draw a graph</h3>
                         <select
                             value={selectedStockSymbol}

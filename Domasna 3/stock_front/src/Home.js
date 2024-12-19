@@ -26,7 +26,7 @@ const Home = () => {
                 </div>
             </nav>
 
-            <div className="hero">
+            <div className="hero" style={{height: '350px'}}>
                 <h1>StocksAppMK</h1>
                 <p>Our site allows you to view and analyze the stock market</p>
                 <span style={{fontWeight: 'bold'}}>

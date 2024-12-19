@@ -1,6 +1,8 @@
 import {Link} from "react-router-dom";
 import Home from "./Home";
 import React, {useEffect, useState} from "react";
+import ReactGaugeChart from "react-gauge-chart";
+import './css/analyze.css';
 
 
 
@@ -21,6 +23,39 @@ const Analyze = () => {
     const [kama,setKama] = useState(null);
     const [oscillatorSignal, setOscillatorSignal] = useState(null);
     const [movingAverageSignal, setMovingAverageSignal] = useState(null);
+
+    // Function to render a gauge for the oscillator signal
+    const renderGauge = (signal, label) => {
+        return (
+            <div style={{width:'300px',height:'300px'}}>
+                <h4>{label}</h4>
+                <ReactGaugeChart
+                    id="gauge-chart"
+                    nrOfLevels={30}
+                    colors={['#ff0000', '#ffcc00', '#00ff00']}
+                    percent={getGaugeValue(signal)}
+                    textColor="#000000"
+                    needleColor="#000000"
+                    arcWidth={0.3}
+                    arcsLength={[0.33, 0.33, 0.33]}
+                />
+                <p>{signal}</p>
+            </div>
+        );
+    };
+
+    const getGaugeValue = (signal) => {
+        switch (signal) {
+            case 'Buy':
+                return 0.75;
+            case 'Neutral':
+                return 0.5;
+            case 'Sell':
+                return 0.25;
+            default:
+                return 0.5;
+        }
+    };
 
     useEffect(() => {
         const fetchStockSymbols = async () => {
@@ -258,13 +293,17 @@ const Analyze = () => {
                     >
                         Overall
                     </button>
+                    <div className="signals" style={{display: "flex", justifyContent: "center"}}>
+                        {renderGauge(oscillatorSignal, 'Oscillator Signal')}
+                        {renderGauge(movingAverageSignal, 'Moving Average Signal')}
+                    </div>
 
                 </div>
 
 
                 <div style={{float: "left"}}>
                     <div>
-                    {rsiValue !== null ? `RSI Index for ${period} day(s): ${rsiValue}` : error ? `Error: ${error}` : "Loading..."}
+                        {rsiValue !== null ? `RSI Index for ${period} day(s): ${rsiValue}` : error ? `Error: ${error}` : "Loading..."}
                     </div>
                 </div>
                 <br/>
@@ -321,10 +360,10 @@ const Analyze = () => {
                         {kama !== null ? `Kaufman's Adaptive Moving Average, for ${period} day(s): ${kama}` : error ? `Error: ${error}` : "Loading..."}
                     </div>
                 </div>
-            </div>
-            <div class={"analyzeGraph"}>
-                {oscillatorSignal != null ? `Oscillator signal is: ${oscillatorSignal}` : error ? `Error: ${error}` : "Loading..."}
-                {movingAverageSignal != null ? `Moving averages signal is: ${movingAverageSignal}` : error ? `Error: ${error}` : "Loading..."}
+                {/*<div className={"analyzeGraph"}>*/}
+                {/*    {oscillatorSignal != null ? `Oscillator signal is: ${oscillatorSignal}` : error ? `Error: ${error}` : "Loading..."}*/}
+                {/*    {movingAverageSignal != null ? `Moving averages signal is: ${movingAverageSignal}` : error ? `Error: ${error}` : "Loading..."}*/}
+                {/*</div>*/}
             </div>
 
             <div className="section">
