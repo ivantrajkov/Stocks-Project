@@ -20,6 +20,7 @@ const Analyze = () => {
     const [tma,setTma] = useState(null);
     const [kama,setKama] = useState(null);
     const [oscillatorSignal, setOscillatorSignal] = useState(null);
+    const [movingAverageSignal, setMovingAverageSignal] = useState(null);
 
     useEffect(() => {
         const fetchStockSymbols = async () => {
@@ -171,6 +172,19 @@ const Analyze = () => {
             setError(error.message);
         }
     };
+    const fetchMovingAverageSignal = async () => {
+        try {
+            const response = await fetch(`http://localhost:8080/api/movingAverages?symbol=${selectedStockSymbol}&sma=${sma}&ema=${ema}&wma=${wma}&tma=${tma}&kama=${kama}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch moving average signal');
+            }
+            const data = await response.text();
+            setMovingAverageSignal(data);
+        } catch (error) {
+            setError(error.message);
+        }
+    };
+
 
     useEffect(() => {
         if (selectedStockSymbol && period){
@@ -236,14 +250,21 @@ const Analyze = () => {
                         <option>7</option>
                         <option>30</option>
                     </select>
-                    <button onClick={fetchOscillatorSignal}>Overall</button>
-                </div>
+                    <button
+                        onClick={() => {
+                            fetchOscillatorSignal();
+                            fetchMovingAverageSignal();
+                        }}
+                    >
+                        Overall
+                    </button>
 
+                </div>
 
 
                 <div style={{float: "left"}}>
                     <div>
-                        {rsiValue !== null ? `RSI Index for ${period} day(s): ${rsiValue}` : error ? `Error: ${error}` : "Loading..."}
+                    {rsiValue !== null ? `RSI Index for ${period} day(s): ${rsiValue}` : error ? `Error: ${error}` : "Loading..."}
                     </div>
                 </div>
                 <br/>
@@ -291,18 +312,19 @@ const Analyze = () => {
                 <br/>
                 <div style={{float: "left"}}>
                     <div>
-                        {tma !== null ? `TMA for ${period} day(s): ${tma}` : error ? `Error: ${error}` : "Loading..."}
+                        {tma !== null ? ` Triangular Moving Average for ${period} day(s): ${tma}` : error ? `Error: ${error}` : "Loading..."}
                     </div>
                 </div>
                 <br/>
                 <div style={{float: "left"}}>
                     <div>
-                        {kama !== null ? `KAMA for ${period} day(s): ${kama}` : error ? `Error: ${error}` : "Loading..."}
+                        {kama !== null ? `Kaufman's Adaptive Moving Average, for ${period} day(s): ${kama}` : error ? `Error: ${error}` : "Loading..."}
                     </div>
                 </div>
             </div>
             <div class={"analyzeGraph"}>
                 {oscillatorSignal != null ? `Oscillator signal is: ${oscillatorSignal}` : error ? `Error: ${error}` : "Loading..."}
+                {movingAverageSignal != null ? `Moving averages signal is: ${movingAverageSignal}` : error ? `Error: ${error}` : "Loading..."}
             </div>
 
             <div className="section">

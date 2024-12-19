@@ -3,10 +3,7 @@ package mk.finki.ukim.dians.stocksapp.controller;
 import mk.finki.ukim.dians.stocksapp.model.StockData;
 import mk.finki.ukim.dians.stocksapp.model.User;
 import mk.finki.ukim.dians.stocksapp.repository.StockRepository;
-import mk.finki.ukim.dians.stocksapp.service.OscillatorService;
-import mk.finki.ukim.dians.stocksapp.service.StockAnalysisService;
-import mk.finki.ukim.dians.stocksapp.service.StockService;
-import mk.finki.ukim.dians.stocksapp.service.UserService;
+import mk.finki.ukim.dians.stocksapp.service.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -29,13 +26,15 @@ public class StockDataController {
     private final StockAnalysisService stockAnalysisService;
     private final UserService userService;
     private final OscillatorService oscillatorService;
+    private final MovingAverageService movingAverageService;
 
-    public StockDataController(StockService stockService, StockRepository stockRepository, StockAnalysisService stockAnalysisService, UserService userService, OscillatorService oscillatorService) {
+    public StockDataController(StockService stockService, StockRepository stockRepository, StockAnalysisService stockAnalysisService, UserService userService, OscillatorService oscillatorService, MovingAverageService movingAverageService) {
         this.stockService = stockService;
         this.stockRepository = stockRepository;
         this.stockAnalysisService = stockAnalysisService;
         this.userService = userService;
         this.oscillatorService = oscillatorService;
+        this.movingAverageService = movingAverageService;
     }
 
 @GetMapping("/all")
@@ -299,6 +298,36 @@ public ResponseEntity<List<StockData>> listAll(
         signalList.add(momentumSignal);
         signalList.add(chandeSignal);
         String combinedSignal = oscillatorService.combineSignals(signalList);
+        return new ResponseEntity<>(combinedSignal,HttpStatus.OK);
+    }
+    @GetMapping("/movingAverages")
+    public ResponseEntity<String> getMovingAverages(
+            @RequestParam String symbol,
+            @RequestParam BigDecimal sma,
+            @RequestParam BigDecimal ema,
+            @RequestParam BigDecimal wma,
+            @RequestParam BigDecimal tma,
+            @RequestParam BigDecimal kama
+    ){
+        List<StockData> listData = stockService.getByStockSymbol(symbol);
+        List<BigDecimal> prices = listData.stream()
+                .map(StockData::getLastTransactionPrice)
+                .collect(Collectors.toList());
+        BigDecimal price = prices.get(0);
+        String smaSignal = movingAverageService.getSimpleMovingAverageSignal(price,sma);
+        String emaSignal = movingAverageService.getExponentialMovingAverageSignal(price,ema);
+        String wmaSignal = movingAverageService.getWeightedMovingAverageSignal(price,wma);
+        String tmaSignal = movingAverageService.getTriangularMovingAverageSignal(price,tma);
+        String kamaSignal = movingAverageService.getKaufmanAdaptiveMovingAverageSignal(price,kama);
+        List<String> signalList = new ArrayList<>();
+        signalList.add(smaSignal);
+        signalList.add(emaSignal);
+        signalList.add(wmaSignal);
+        signalList.add(tmaSignal);
+        signalList.add(kamaSignal);
+        String combinedSignal = movingAverageService.combineSignals(signalList);
+
+
         return new ResponseEntity<>(combinedSignal,HttpStatus.OK);
     }
 
