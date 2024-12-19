@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const List = () => { // No `state` prop
+const List = () => {
     const [state, setState] = useState([]);
 
     useEffect(() => {

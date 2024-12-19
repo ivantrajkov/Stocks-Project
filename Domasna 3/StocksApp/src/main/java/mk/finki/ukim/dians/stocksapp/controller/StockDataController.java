@@ -3,6 +3,7 @@ package mk.finki.ukim.dians.stocksapp.controller;
 import mk.finki.ukim.dians.stocksapp.model.StockData;
 import mk.finki.ukim.dians.stocksapp.model.User;
 import mk.finki.ukim.dians.stocksapp.repository.StockRepository;
+import mk.finki.ukim.dians.stocksapp.service.OscillatorService;
 import mk.finki.ukim.dians.stocksapp.service.StockAnalysisService;
 import mk.finki.ukim.dians.stocksapp.service.StockService;
 import mk.finki.ukim.dians.stocksapp.service.UserService;
@@ -27,12 +28,14 @@ public class StockDataController {
     private final StockRepository stockRepository;
     private final StockAnalysisService stockAnalysisService;
     private final UserService userService;
+    private final OscillatorService oscillatorService;
 
-    public StockDataController(StockService stockService, StockRepository stockRepository, StockAnalysisService stockAnalysisService, UserService userService) {
+    public StockDataController(StockService stockService, StockRepository stockRepository, StockAnalysisService stockAnalysisService, UserService userService, OscillatorService oscillatorService) {
         this.stockService = stockService;
         this.stockRepository = stockRepository;
         this.stockAnalysisService = stockAnalysisService;
         this.userService = userService;
+        this.oscillatorService = oscillatorService;
     }
 
 @GetMapping("/all")
@@ -82,7 +85,6 @@ public ResponseEntity<List<StockData>> listAll(
                         StockData::getDate,
                         Collectors.averagingDouble(s -> Optional.ofNullable(s.getAveragePrice()).map(BigDecimal::doubleValue).orElse(0.0))
                 ));
-        System.out.println(averageByYear);
 
         return new ResponseEntity<>(averageByYear, HttpStatus.OK);
     }
@@ -102,6 +104,7 @@ public ResponseEntity<List<StockData>> listAll(
         List<BigDecimal> prices = listData.stream()
                 .map(StockData::getLastTransactionPrice)
                 .collect(Collectors.toList());
+        Collections.reverse(prices);
 
         BigDecimal rsiIndex = stockAnalysisService.calculateRSI(prices,period);
 
@@ -117,6 +120,7 @@ public ResponseEntity<List<StockData>> listAll(
         List<BigDecimal> prices = listData.stream()
                 .map(StockData::getLastTransactionPrice)
                 .collect(Collectors.toList());
+        Collections.reverse(prices);
         BigDecimal stochasticK = stockAnalysisService.calculateStochasticK(prices,period);
         return new ResponseEntity<>(stochasticK,HttpStatus.OK);
     }
@@ -175,6 +179,7 @@ public ResponseEntity<List<StockData>> listAll(
         List<BigDecimal> prices = listData.stream()
                 .map(StockData::getLastTransactionPrice)
                 .collect(Collectors.toList());
+        Collections.reverse(prices);
         BigDecimal roc = stockAnalysisService.calculateROC(prices,period);
         return new ResponseEntity<>(roc,HttpStatus.OK);
     }
@@ -189,6 +194,7 @@ public ResponseEntity<List<StockData>> listAll(
         List<BigDecimal> prices = listData.stream()
                 .map(StockData::getLastTransactionPrice)
                 .collect(Collectors.toList());
+        Collections.reverse(prices);
         BigDecimal momentum = stockAnalysisService.calculateMomentum(prices,period);
         return new ResponseEntity<>(momentum,HttpStatus.OK);
     }
@@ -202,6 +208,7 @@ public ResponseEntity<List<StockData>> listAll(
         List<BigDecimal> prices = listData.stream()
                 .map(StockData::getLastTransactionPrice)
                 .collect(Collectors.toList());
+        Collections.reverse(prices);
         BigDecimal sma = stockAnalysisService.calculateSMAOscillator(prices,period);
         return new ResponseEntity<>(sma,HttpStatus.OK);
     }
@@ -214,6 +221,7 @@ public ResponseEntity<List<StockData>> listAll(
         List<BigDecimal> prices = listData.stream()
                 .map(StockData::getLastTransactionPrice)
                 .collect(Collectors.toList());
+        Collections.reverse(prices);
         BigDecimal cmo = stockAnalysisService.calculateCMO(prices,period);
         return new ResponseEntity<>(cmo,HttpStatus.OK);
     }
@@ -226,6 +234,7 @@ public ResponseEntity<List<StockData>> listAll(
         List<BigDecimal> prices = listData.stream()
                 .map(StockData::getLastTransactionPrice)
                 .collect(Collectors.toList());
+        Collections.reverse(prices);
         BigDecimal ema = stockAnalysisService.calculateEMA(prices,period);
         return new ResponseEntity<>(ema,HttpStatus.OK);
     }
@@ -239,6 +248,7 @@ public ResponseEntity<List<StockData>> listAll(
         List<BigDecimal> prices = listData.stream()
                 .map(StockData::getLastTransactionPrice)
                 .collect(Collectors.toList());
+        Collections.reverse(prices);
         BigDecimal wma = stockAnalysisService.calculateWMA(prices,period);
         return new ResponseEntity<>(wma,HttpStatus.OK);
     }
@@ -251,6 +261,7 @@ public ResponseEntity<List<StockData>> listAll(
         List<BigDecimal> prices = listData.stream()
                 .map(StockData::getLastTransactionPrice)
                 .collect(Collectors.toList());
+        Collections.reverse(prices);
         BigDecimal tma = stockAnalysisService.calculateTMA(prices,period);
         return new ResponseEntity<>(tma,HttpStatus.OK);
     }
@@ -263,8 +274,32 @@ public ResponseEntity<List<StockData>> listAll(
         List<BigDecimal> prices = listData.stream()
                 .map(StockData::getLastTransactionPrice)
                 .collect(Collectors.toList());
+        Collections.reverse(prices);
         BigDecimal tma = stockAnalysisService.calculateKAMA(prices,period);
         return new ResponseEntity<>(tma,HttpStatus.OK);
+    }
+
+    @GetMapping("/oscillators")
+    public ResponseEntity<String> getOscillators(
+            @RequestParam BigDecimal rsi,
+            @RequestParam BigDecimal stochastic,
+            @RequestParam BigDecimal rateOfChange,
+            @RequestParam BigDecimal momentum,
+            @RequestParam BigDecimal chande
+    ){
+        String rsiSignal = oscillatorService.getRsiSignal(rsi);
+        String stochasticSignal = oscillatorService.getStochasticSignal(stochastic);
+        String rocSignal = oscillatorService.getRateOfChangeSignal(rateOfChange);
+        String momentumSignal = oscillatorService.getMomentumSignal(momentum);
+        String chandeSignal = oscillatorService.getChandeSignal(chande);
+        List<String> signalList = new ArrayList<>();
+        signalList.add(rsiSignal);
+        signalList.add(stochasticSignal);
+        signalList.add(rocSignal);
+        signalList.add(momentumSignal);
+        signalList.add(chandeSignal);
+        String combinedSignal = oscillatorService.combineSignals(signalList);
+        return new ResponseEntity<>(combinedSignal,HttpStatus.OK);
     }
 
 

@@ -19,6 +19,7 @@ const Analyze = () => {
     const [wma,setWma] = useState(null);
     const [tma,setTma] = useState(null);
     const [kama,setKama] = useState(null);
+    const [oscillatorSignal, setOscillatorSignal] = useState(null);
 
     useEffect(() => {
         const fetchStockSymbols = async () => {
@@ -45,7 +46,6 @@ const Analyze = () => {
             }
             const data = await response.json();
             setRsiValue(data);
-            console.log(rsiValue);
         } catch (error) {
             setError(error.message);
         }
@@ -76,7 +76,7 @@ const Analyze = () => {
     };
     const fetchMomentum = async () => {
         try {
-            const response = await fetch(`http://localhost:8080/api/roc?symbol=${selectedStockSymbol}&period=${period}`);
+            const response = await fetch(`http://localhost:8080/api/momentum?symbol=${selectedStockSymbol}&period=${period}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch rate of change value');
             }
@@ -118,7 +118,6 @@ const Analyze = () => {
             }
             const data = await response.json();
             setEma(data);
-            console.log(rsiValue);
         } catch (error) {
             setError(error.message);
         }
@@ -131,7 +130,6 @@ const Analyze = () => {
             }
             const data = await response.json();
             setWma(data);
-            console.log(rsiValue);
         } catch (error) {
             setError(error.message);
         }
@@ -144,7 +142,6 @@ const Analyze = () => {
             }
             const data = await response.json();
             setTma(data);
-            console.log(rsiValue);
         } catch (error) {
             setError(error.message);
         }
@@ -157,14 +154,26 @@ const Analyze = () => {
             }
             const data = await response.json();
             setKama(data);
-            console.log(rsiValue);
+        } catch (error) {
+            setError(error.message);
+        }
+    };
+    const fetchOscillatorSignal = async () => {
+        try {
+            const response = await fetch(`http://localhost:8080/api/oscillators?rsi=${rsiValue}&stochastic=${stochastic}&rateOfChange=${roc}&momentum=${momentum}&chande=${cmo}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch oscillator signal');
+            }
+            const data = await response.text();
+            setOscillatorSignal(data);
+            // console.log(`http://localhost:8080/api/oscillators?rsi=${rsiValue}&stochastic=${stochastic}&rateOfChange=${roc}&momentum=${momentum}&chande=${cmo}`)
         } catch (error) {
             setError(error.message);
         }
     };
 
     useEffect(() => {
-        if (selectedStockSymbol || period){
+        if (selectedStockSymbol && period){
             fetchRsiValue();
             fetchStochasticValue();
             fetchRateOfChange();
@@ -177,7 +186,20 @@ const Analyze = () => {
             fetchKAMA();
 
         }
-    }, [selectedStockSymbol,period,stochastic,roc,momentum,sma,cmo,ema,wma,tma,kama]);
+    }, [selectedStockSymbol,period,cmo]);
+
+    // useEffect(() => {
+    //     console.log(rsiValue + " " + momentum + " " + stochastic + " " + cmo + " " + roc)
+    //     if(rsiValue && momentum && stochastic && cmo && roc){
+    //         fetchOscillatorSignal();
+    //     }
+    //     fetchOscillatorSignal();
+    // }, [rsiValue, cmo,stochastic,momentum,roc]);
+
+
+
+
+
 
     return (
         <>
@@ -214,7 +236,9 @@ const Analyze = () => {
                         <option>7</option>
                         <option>30</option>
                     </select>
+                    <button onClick={fetchOscillatorSignal}>Overall</button>
                 </div>
+
 
 
                 <div style={{float: "left"}}>
@@ -276,8 +300,9 @@ const Analyze = () => {
                         {kama !== null ? `KAMA for ${period} day(s): ${kama}` : error ? `Error: ${error}` : "Loading..."}
                     </div>
                 </div>
-
-
+            </div>
+            <div class={"analyzeGraph"}>
+                {oscillatorSignal != null ? `Oscillator signal is: ${oscillatorSignal}` : error ? `Error: ${error}` : "Loading..."}
             </div>
 
             <div className="section">

@@ -177,10 +177,10 @@ const StockMarket = () => {
                 )}
             </div>
 
-            <div className="section">
-                <img src="/resources/logo.png" alt="StocksAppMK Logo" style={{ width: '250px', height: '250px' }} />
-                <img src="/resources/trust.jpg" alt="StocksAppMK Logo" style={{ width: '250px', height: '250px' }} />
-            </div>
+            {/*<div className="section">*/}
+            {/*    <img src="/resources/logo.png" alt="StocksAppMK Logo" style={{ width: '250px', height: '250px' }} />*/}
+            {/*    <img src="/resources/trust.jpg" alt="StocksAppMK Logo" style={{ width: '250px', height: '250px' }} />*/}
+            {/*</div>*/}
         </>
     );
 };

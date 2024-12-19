@@ -6,7 +6,10 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @Service
 public class StockAnalysisServiceImpl implements StockAnalysisService {
@@ -135,18 +138,18 @@ public class StockAnalysisServiceImpl implements StockAnalysisService {
             throw new IllegalArgumentException("Not enough data points to calculate SMA Oscillator for the given period.");
         }
 
+        List<BigDecimal> recentPrices = closingPrices.subList(closingPrices.size() - period, closingPrices.size());
+
         BigDecimal sum = BigDecimal.ZERO;
-        for (int i = closingPrices.size() - period; i < closingPrices.size(); i++) {
-            sum = sum.add(closingPrices.get(i));
+        for (BigDecimal price : recentPrices) {
+            sum = sum.add(price);
         }
-        BigDecimal sma = sum.divide(BigDecimal.valueOf(period), RoundingMode.HALF_UP);
 
-        BigDecimal currentClose = closingPrices.get(closingPrices.size() - 1);
-        closingPrices = closingPrices.stream().limit(period).toList();
-        System.out.println(closingPrices);
-
-        return currentClose.subtract(sma);
+        return sum.divide(BigDecimal.valueOf(period), RoundingMode.HALF_UP);
     }
+
+
+
 
     @Override
     public BigDecimal calculateCMO(List<BigDecimal> closingPrices, int period) {
@@ -203,18 +206,25 @@ public class StockAnalysisServiceImpl implements StockAnalysisService {
 
     @Override
     public BigDecimal calculateTMA(List<BigDecimal> prices, int period) {
-        if (prices == null || prices.size() < period) {
-            throw new IllegalArgumentException("Not enough data points to calculate TMA.");
+        if (prices == null || prices.size() < 2 * period) {
+            throw new IllegalArgumentException("Not enough data points to calculate TMA. Ensure the list has at least " + (2 * period) + " data points.");
         }
 
-        List<BigDecimal> firstSMAValues = prices.subList(prices.size() - period, prices.size());
-        BigDecimal firstSMA = calculateSMAOscillator(firstSMAValues, period);
+        List<BigDecimal> firstSMAValues = new ArrayList<>();
+        for (int i = 0; i <= prices.size() - period; i++) {
+            List<BigDecimal> subList = prices.subList(i, i + period);
+            firstSMAValues.add(calculateSMAOscillator(subList, period));
+        }
 
         List<BigDecimal> secondSMAValues = new ArrayList<>();
-        secondSMAValues.add(firstSMA);
-        System.out.println("TMA IS " + calculateSMAOscillator(secondSMAValues, period));
-        return calculateSMAOscillator(secondSMAValues, period);
+        for (int i = 0; i <= firstSMAValues.size() - period; i++) {
+            List<BigDecimal> subList = firstSMAValues.subList(i, i + period);
+            secondSMAValues.add(calculateSMAOscillator(subList, period));
+        }
+
+        return secondSMAValues.get(secondSMAValues.size() - 1);
     }
+
 
     @Override
     public BigDecimal calculateKAMA(List<BigDecimal> prices, int period) {
