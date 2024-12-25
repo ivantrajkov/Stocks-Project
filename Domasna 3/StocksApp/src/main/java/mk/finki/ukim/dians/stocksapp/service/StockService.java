@@ -12,5 +12,7 @@ public interface StockService {
     List<StockData> getFilteredStockData(String symbol, BigDecimal avgPrice, String fromDate, String toDate);
     List<StockData> getByStockSymbol(String symbol);
     List<String> findDistinctStockSymbols();
+//    List<StockData> g
+
 
 }

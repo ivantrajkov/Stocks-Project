@@ -30,4 +30,5 @@ public interface StockRepository extends JpaRepository<StockData, Long> {
     );
     @Query("SELECT DISTINCT s.stockSymbol FROM StockData s")
     List<String> findDistinctStockSymbols();
+
 }
