@@ -42,6 +42,7 @@ const StockGraph = () => {
                 <div>
                     <Link to="/">Home</Link>
                     <Link to="/stock-market">Stock market</Link>
+                    <Link to="/Analyze">Analyze</Link>
                     <Link to="/login">Login</Link>
                     <Link to="/Register">Register</Link>
                 </div>
