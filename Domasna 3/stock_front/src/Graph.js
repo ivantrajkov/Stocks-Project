@@ -20,7 +20,7 @@ const StockGraph = () => {
 
                 const transformedData = Object.entries(data).map(([year, average]) => ({
                     year,
-                    average,
+                    average: parseFloat(average).toFixed(2),
                 }));
                 setChartData(transformedData);
             } catch (err) {
