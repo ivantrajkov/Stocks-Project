@@ -255,9 +255,9 @@ const Analyze = () => {
             <nav className="navbar">
                 <img src="/resources/logo.png" alt="StocksAppMK Logo"/>
                 <div>
-                    <Link to="/" style={{backgroundColor: '#d3d3d3'}}>Home</Link>
+                    <Link to="/">Home</Link>
                     <Link to="/stock-market">Stock market</Link>
-                    <Link to="/Analyze">Analyze</Link>
+                    <Link to="/Analyze" style={{backgroundColor: '#d3d3d3'}}>Analyze</Link>
                     <Link to="/Login">Login</Link>
                     <Link to="/Register">Register</Link>
                 </div>
