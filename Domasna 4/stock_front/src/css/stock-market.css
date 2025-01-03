@@ -1,0 +1,85 @@
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    padding: 10px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.navbar img {
+    width: 100px;
+    height: auto;
+}
+
+.navbar a {
+    text-decoration: none;
+    color: #333;
+    margin: 0 10px;
+    font-size: 16px;
+    border: 2px solid transparent;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s, color 0.3s, border 0.3s;
+}
+
+.navbar a:hover {
+    background-color: #d3d3d3;
+    color: #333;
+    border-color: #bbb;
+}
+
+
+.table-section {
+    margin-left: 20px;
+}
+
+.section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background-color: #ffe5e5;
+    height: 330px;
+}
+
+.section img {
+    width: 300px;
+    height: auto;
+    margin-right: 20px;
+}
+
+.section .text {
+    font-size: 18px;
+    font-weight: bold;
+}
+table, td, th {
+    border-collapse: collapse;
+    border: 1px solid #ddd;
+    text-align: center;
+    padding: 5px;
+
+}
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tr:nth-child(odd) {
+    background-color: #ffffff;
+}
+img{
+    width: 100px;
+}
+#btnDraw {
+    display: inline-block;
+    padding: 5px;
+    background-color: #ffe5e5;
+    color: black;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    border: 1px solid #4CAF50;
+    cursor: pointer;
+    margin-left: 5px;
+}
