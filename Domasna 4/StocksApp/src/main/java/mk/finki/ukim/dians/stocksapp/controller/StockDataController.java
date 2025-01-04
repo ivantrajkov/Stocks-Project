@@ -34,7 +34,7 @@ public class StockDataController {
         this.oscillatorService = oscillatorService;
         this.movingAverageService = movingAverageService;
     }
-
+// Returns all the stock data
 @GetMapping("/all")
 public ResponseEntity<List<StockData>> listAll(
         @RequestParam(required = false) String symbol,
@@ -67,24 +67,19 @@ public ResponseEntity<List<StockData>> listAll(
     return new ResponseEntity<>(listData, HttpStatus.OK);
     }
 
+    /*
+     Returns a map of the yeary averages for the stock by the symbol parameter,
+     it is used for drawing a graph on the frontend
+     */
     @GetMapping("/graph")
     public ResponseEntity<Map<String, Double>> getYearlyAverages(@RequestParam String symbol) {
 
         List<StockData> listData = stockService.getByStockSymbol(symbol);
-
-        Map<String, Double> averageByYear = listData.stream()
-                .map(s -> {
-                    String year = s.getDate().substring(0, 4);
-                    s.setDate(year);
-                    return s;
-                })
-                .collect(Collectors.groupingBy(
-                        StockData::getDate,
-                        Collectors.averagingDouble(s -> Optional.ofNullable(s.getAveragePrice()).map(BigDecimal::doubleValue).orElse(0.0))
-                ));
+        Map<String, Double> averageByYear = stockService.getYearAverage(listData);
 
         return new ResponseEntity<>(averageByYear, HttpStatus.OK);
     }
+    //Returns all stock data
     @GetMapping("/stocks")
     public ResponseEntity<List<String>> getStocksSymbols(
     ){
@@ -92,6 +87,7 @@ public ResponseEntity<List<StockData>> listAll(
         return new ResponseEntity<>(stockSymbols,HttpStatus.OK);
 
     }
+    // Returns the RSI index for a stock symbol and the period specified by the period parameter
     @GetMapping("/rsi")
     public ResponseEntity<BigDecimal> getRsi(
             @RequestParam String symbol,
@@ -107,6 +103,7 @@ public ResponseEntity<List<StockData>> listAll(
         return new ResponseEntity<>(rsiIndex,HttpStatus.OK);
     }
 
+    // Returns the stochacstic index for a stock symbol and the period specified by the period parameter
     @GetMapping("/stochastic")
     public ResponseEntity<BigDecimal> getStochastic(
             @RequestParam String symbol,
@@ -130,7 +127,7 @@ public ResponseEntity<List<StockData>> listAll(
         userService.addUser(user);
         Map<String, String> response = new HashMap<>();
         response.put("redirect", "/login");
-        return ResponseEntity.ok(response);
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
     @PostMapping("/login")
@@ -149,7 +146,7 @@ public ResponseEntity<List<StockData>> listAll(
                     if (user.getPassword().equals(password)) {
                         user.setLoggedIn(true);
                         userService.addUser(user);
-                        return ResponseEntity.ok("Login successful");
+                        return new ResponseEntity<>("Login successful",HttpStatus.OK);
                     }
                     return ResponseEntity.badRequest().body("Invalid password");
                 })
@@ -165,6 +162,7 @@ public ResponseEntity<List<StockData>> listAll(
 
         }return new ResponseEntity<>(user.getUsername(),HttpStatus.OK);
     }
+    // Returns the ROC index for a stock symbol and the period specified by the period parameter
     @GetMapping("/roc")
     public ResponseEntity<BigDecimal> getRoc(
             @RequestParam String symbol,
@@ -178,7 +176,7 @@ public ResponseEntity<List<StockData>> listAll(
         return new ResponseEntity<>(roc,HttpStatus.OK);
     }
 
-
+    // Returns the momentum index for a stock symbol and the period specified by the period parameter
     @GetMapping("/momentum")
     public ResponseEntity<BigDecimal> getMomentum(
             @RequestParam String symbol,
@@ -192,6 +190,7 @@ public ResponseEntity<List<StockData>> listAll(
         return new ResponseEntity<>(momentum,HttpStatus.OK);
     }
 
+    // Returns the SMA index for a stock symbol and the period specified by the period parameter
     @GetMapping("/sma")
     public ResponseEntity<BigDecimal> getSimpleMovingAverage(
             @RequestParam String symbol,
@@ -204,6 +203,7 @@ public ResponseEntity<List<StockData>> listAll(
         BigDecimal sma = stockAnalysisService.calculateSMAOscillator(prices,period);
         return new ResponseEntity<>(sma,HttpStatus.OK);
     }
+    // Returns the CMO index for a stock symbol and the period specified by the period parameter
     @GetMapping("/cmo")
     public ResponseEntity<BigDecimal> getCMO(
             @RequestParam String symbol,
@@ -216,6 +216,7 @@ public ResponseEntity<List<StockData>> listAll(
         BigDecimal cmo = stockAnalysisService.calculateCMO(prices,period);
         return new ResponseEntity<>(cmo,HttpStatus.OK);
     }
+    // Returns the EMA index for a stock symbol and the period specified by the period parameter
     @GetMapping("/ema")
     public ResponseEntity<BigDecimal> getEMA(
             @RequestParam String symbol,
@@ -229,6 +230,7 @@ public ResponseEntity<List<StockData>> listAll(
         return new ResponseEntity<>(ema,HttpStatus.OK);
     }
 
+    // Returns the WMA index for a stock symbol and the period specified by the period parameter
     @GetMapping("/wma")
     public ResponseEntity<BigDecimal> getWMA(
             @RequestParam String symbol,
@@ -241,6 +243,7 @@ public ResponseEntity<List<StockData>> listAll(
         BigDecimal wma = stockAnalysisService.calculateWMA(prices,period);
         return new ResponseEntity<>(wma,HttpStatus.OK);
     }
+    // Returns the TMA index for a stock symbol and the period specified by the period parameter
     @GetMapping("/tma")
     public ResponseEntity<BigDecimal> getTMA(
             @RequestParam String symbol,
@@ -253,6 +256,7 @@ public ResponseEntity<List<StockData>> listAll(
         BigDecimal tma = stockAnalysisService.calculateTMA(prices,period);
         return new ResponseEntity<>(tma,HttpStatus.OK);
     }
+    // Returns the KAMA index for a stock symbol and the period specified by the period parameter
     @GetMapping("/kama")
     public ResponseEntity<BigDecimal> getKAMA(
             @RequestParam String symbol,
@@ -266,6 +270,11 @@ public ResponseEntity<List<StockData>> listAll(
         return new ResponseEntity<>(tma,HttpStatus.OK);
     }
 
+    /*
+    For each parameter sent as an oscillator value, it calls the oscillator service
+    to get the signal if its positive or negative for that oscillator value
+    and combines them into one signal
+    */
     @GetMapping("/oscillators")
     public ResponseEntity<String> getOscillators(
             @RequestParam BigDecimal rsi,
@@ -284,6 +293,11 @@ public ResponseEntity<List<StockData>> listAll(
 
         return new ResponseEntity<>(combinedSignal,HttpStatus.OK);
     }
+    /*
+    For each parameter sent as an moving average value, it calls the moving average service
+    to get the signal if its positive or negative for that moving average value
+    and combines them into one signal
+    */
     @GetMapping("/movingAverages")
     public ResponseEntity<String> getMovingAverages(
             @RequestParam String symbol,

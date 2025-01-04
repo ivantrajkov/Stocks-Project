@@ -13,6 +13,7 @@ public interface StockService {
     List<StockData> getByStockSymbol(String symbol);
     List<String> findDistinctStockSymbols();
     List<BigDecimal> getLastTransactionPrices(List<StockData> stockDataList);
+    Map<String, Double> getYearAverage(List<StockData> listData);
 
 
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -49,6 +50,20 @@ public class StockServiceImpl implements StockService {
         return stockDataList.stream()
                 .map(StockData::getLastTransactionPrice)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Map<String, Double> getYearAverage(List<StockData> listData) {
+        return listData.stream()
+                .map(s -> {
+                    String year = s.getDate().substring(0, 4);
+                    s.setDate(year);
+                    return s;
+                })
+                .collect(Collectors.groupingBy(
+                        StockData::getDate,
+                        Collectors.averagingDouble(s -> Optional.ofNullable(s.getAveragePrice()).map(BigDecimal::doubleValue).orElse(0.0))
+                ));
     }
 
 }
