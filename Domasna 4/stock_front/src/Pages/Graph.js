@@ -39,16 +39,6 @@ const StockGraph = () => {
 
     return (
         <>
-            {/*<nav className="navbar">*/}
-            {/*    <img src="/resources/logo.png" alt="StocksAppMK Logo"/>*/}
-            {/*    <div>*/}
-            {/*        <Link to="/">Home</Link>*/}
-            {/*        <Link to="/stock-market">Stock market</Link>*/}
-            {/*        <Link to="/Analyze">Analyze</Link>*/}
-            {/*        <Link to="/login">Login</Link>*/}
-            {/*        <Link to="/Register">Register</Link>*/}
-            {/*    </div>*/}
-            {/*</nav>*/}
             <NavBar/>
             <ResponsiveContainer width="100%" height={400}>
                 <LineChart data={chartData}>

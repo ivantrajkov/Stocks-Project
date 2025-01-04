@@ -43,6 +43,7 @@ const Login = () => {
             <NavBar/>
 
             <div className="login">
+                <h1>Login:</h1>
                 <label htmlFor={"username"}>Username:</label>
                 <input
                     type={"text"}

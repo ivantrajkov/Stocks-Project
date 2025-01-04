@@ -40,20 +40,11 @@ const Register = () => {
 
     return (
         <>
-            {/*<nav className="navbar">*/}
-            {/*    <img src="/resources/logo.png" alt="StocksAppMK Logo"/>*/}
-            {/*    <div>*/}
-            {/*        <Link to="/">Home</Link>*/}
-            {/*        <Link to="/stock-market">Stock market</Link>*/}
-            {/*        <Link to="/analyze">Analyze</Link>*/}
-            {/*        <Link to="/login">Login</Link>*/}
-            {/*        <Link to="/register" style={{ backgroundColor: '#d3d3d3' }}>Register</Link>*/}
-            {/*    </div>*/}
-            {/*</nav>*/}
             <NavBar/>
 
 
             <div className="login">
+                <h1>Register:</h1>
                 <label htmlFor={"text"}>Username:</label>
                 <input type={"text"} id={"username"} onChange={(e) => setUsername(e.target.value)}/>
                 <label htmlFor={"password"}>Password:</label>

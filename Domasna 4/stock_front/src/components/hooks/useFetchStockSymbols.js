@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-
+//Returns the stock symbols from the backend
 const useFetchStockSymbols = (url) => {
     const [stockSymbols, setStockSymbols] = useState([]);
     const [error, setError] = useState(null);

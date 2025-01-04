@@ -5,11 +5,13 @@ import ReactGaugeChart from "react-gauge-chart";
 import '../css/analyze.css';
 import NavBar from "../components/NavBar/NavBar";
 import Footer from "../components/Footer/Footer";
+import useFetchStockSymbols from "../components/hooks/useFetchStockSymbols";
+import renderGauge from "../components/utils/Gauge";
 
 
 
 const Analyze = () => {
-    const [stockSymbols, setStockSymbols] = useState([]);
+    const { stockSymbols, eror } = useFetchStockSymbols('http://localhost:8080/api/stocks');
     const [error, setError] = useState(null);
     const [selectedStockSymbol, setSelectedStockSymbol] = useState('ADIN');
     const [rsiValue, setRsiValue] = useState(null);
@@ -26,57 +28,6 @@ const Analyze = () => {
     const [oscillatorSignal, setOscillatorSignal] = useState(null);
     const [movingAverageSignal, setMovingAverageSignal] = useState(null);
 
-    // Function to render the gauge chart for a given signal
-    const renderGauge = (signal, label) => {
-        return (
-            <div style={{width:'300px',height:'300px'}}>
-                <h4>{label}</h4>
-                <ReactGaugeChart
-                    id="gauge-chart"
-                    nrOfLevels={30}
-                    colors={['#ff0000', '#ffcc00', '#00ff00']}
-                    percent={getGaugeValue(signal)}
-                    textColor="#000000"
-                    needleColor="#000000"
-                    arcWidth={0.3}
-                    arcsLength={[0.33, 0.33, 0.33]}
-                />
-                <p>{signal}</p>
-            </div>
-        );
-    };
-
-    // Function to determine the gauge value based on the signal (Buy, Neutral, Sell)
-    const getGaugeValue = (signal) => {
-        switch (signal) {
-            case 'Buy':
-                return 0.75;
-            case 'Neutral':
-                return 0.5;
-            case 'Sell':
-                return 0.25;
-            default:
-                return 0.5;
-        }
-    };
-
-    // useEffect hook to fetch the stock symbols from the backend
-    useEffect(() => {
-        const fetchStockSymbols = async () => {
-            try {
-                const response = await fetch('http://localhost:8080/api/stocks');
-                if (!response.ok) {
-                    throw new Error('Failed to fetch stock symbols');
-                }
-                const data = await response.json();
-                setStockSymbols(data);
-            } catch (error) {
-                setError(error.message);
-            }
-        };
-
-        fetchStockSymbols();
-    }, []);
 
     // Function to fetch a specific technical indicator from the backend and set the corresponding state
     const fetchIndicator = async (indicator, setState) => {

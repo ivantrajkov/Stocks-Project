@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import NavBar from "../components/NavBar/NavBar";
 import Footer from "../components/Footer/Footer";
 import "../css/home.css"
+import { handleDownloadCSV } from "../components/utils/csvDownload"
 
 const Home = () => {
     const [username, setUsername] = useState(null);
@@ -13,26 +14,6 @@ const Home = () => {
             .then((data) => setUsername(data))
             .catch((error) => console.error('Error getting the username!', error));
     }, []);
-    const handleDownloadCSV = () => {
-        fetch('http://localhost:8080/csv')
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.blob();
-            })
-            .then((blob) => {
-                const url = window.URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = 'data.csv';
-                link.click();
-                window.URL.revokeObjectURL(url);
-            })
-            .catch((error) => {
-                console.error('Error downloading the CSV file:', error);
-            });
-    };
 
     return (
         <>

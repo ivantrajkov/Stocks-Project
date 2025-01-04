@@ -2,14 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
 import '../css/stock-market.css';
 import NavBar from "../components/NavBar/NavBar";
-// import useFetchStockSymbols from '../hooks/useFetchStockSymbols';
+import useFetchStockSymbols from "../components/hooks/useFetchStockSymbols";
 
 const StockMarket = () => {
     const [tableData, setTableData] = useState([]);
     const [filteredData, setFilteredData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [stockSymbols, setStockSymbols] = useState([]);
+    const { stockSymbols, eror } = useFetchStockSymbols('http://localhost:8080/api/stocks');
+
 
     const [stockSymbolFilter, setStockSymbolFilter] = useState('');
     const [selectedStockSymbol, setSelectedStockSymbol] = useState('ZPOG');
@@ -25,24 +26,6 @@ const StockMarket = () => {
     const formatNumber = (number) => {
         return new Intl.NumberFormat('mk-MK').format(number);
     };
-
-
-    useEffect(() => {
-        const fetchStockSymbols = async () => {
-            try {
-                const response = await fetch('http://localhost:8080/api/stocks');
-                if (!response.ok) {
-                    throw new Error('Failed to fetch stock symbols');
-                }
-                const data = await response.json();
-                setStockSymbols(data);
-            } catch (error) {
-                setError(error.message);
-            }
-        };
-
-        fetchStockSymbols();
-    }, []);
 
     useEffect(() => {
         const fetchInitialStockData = async () => {

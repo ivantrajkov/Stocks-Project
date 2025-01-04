@@ -49,7 +49,7 @@
 }
 
 
-.section {
+.footer {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -58,13 +58,13 @@
     height: 330px;
 }
 
-.section img {
+.footer img {
     width: 300px;
     height: auto;
     margin-right: 20px;
 }
 
-.section .text {
+.footer .text {
     font-size: 18px;
     font-weight: bold;
 }
