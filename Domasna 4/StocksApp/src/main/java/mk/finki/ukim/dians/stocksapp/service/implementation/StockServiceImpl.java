@@ -25,10 +25,10 @@ public class StockServiceImpl implements StockService {
         return stockRepository.findAll();
     }
 
-    @Override
-    public Optional<StockData> getStockDataById(Long id) {
-        return stockRepository.findById(id);
-    }
+//    @Override
+//    public Optional<StockData> getStockDataById(Long id) {
+//        return stockRepository.findById(id);
+//    }
 
     @Override
     public List<StockData> getFilteredStockData(String symbol, BigDecimal avgPrice , String fromDate, String toDate)  {

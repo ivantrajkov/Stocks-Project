@@ -210,19 +210,10 @@ public class StockAnalysisServiceImpl implements StockAnalysisService {
             throw new IllegalArgumentException("Not enough data points to calculate TMA. Ensure the list has at least " + (2 * period) + " data points.");
         }
 
-//        List<BigDecimal> firstSMAValues = new ArrayList<>();
-//        for (int i = 0; i <= prices.size() - period; i++) {
-//            List<BigDecimal> subList = prices.subList(i, i + period);
-//            firstSMAValues.add(calculateSMAOscillator(subList, period));
-//        }
         List<BigDecimal> firstSMAValues = calculateSMAForPeriod(prices, period);
         List<BigDecimal> secondSMAValues = calculateSMAForPeriod(firstSMAValues, period);
 
-//        List<BigDecimal> secondSMAValues = new ArrayList<>();
-//        for (int i = 0; i <= firstSMAValues.size() - period; i++) {
-//            List<BigDecimal> subList = firstSMAValues.subList(i, i + period);
-//            secondSMAValues.add(calculateSMAOscillator(subList, period));
-//        }
+
 
         return secondSMAValues.get(secondSMAValues.size() - 1);
     }
@@ -265,7 +256,5 @@ public class StockAnalysisServiceImpl implements StockAnalysisService {
         }
         return smaValues;
     }
-
-
 
 }

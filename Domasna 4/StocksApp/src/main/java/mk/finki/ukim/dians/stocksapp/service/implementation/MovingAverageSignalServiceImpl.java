@@ -1,13 +1,13 @@
 package mk.finki.ukim.dians.stocksapp.service.implementation;
 
-import mk.finki.ukim.dians.stocksapp.service.MovingAverageService;
+import mk.finki.ukim.dians.stocksapp.service.MovingAverageSignalService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 @Service
-public class MovingAverageServiceImpl implements MovingAverageService {
+public class MovingAverageSignalServiceImpl implements MovingAverageSignalService {
     private String getSignal(BigDecimal currentPrice, BigDecimal movingAverageValue) {
         return currentPrice.compareTo(movingAverageValue) > 0 ? "Buy" : "Sell";
     }

@@ -1,13 +1,13 @@
 package mk.finki.ukim.dians.stocksapp.service.implementation;
 
-import mk.finki.ukim.dians.stocksapp.service.OscillatorService;
+import mk.finki.ukim.dians.stocksapp.service.OscillatorSignalService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 @Service
-public class OscillatorServiceImpl implements OscillatorService {
+public class OscillatorSignalServiceImpl implements OscillatorSignalService {
 
     @Override
     public String getRsiSignal(BigDecimal rsi) {
