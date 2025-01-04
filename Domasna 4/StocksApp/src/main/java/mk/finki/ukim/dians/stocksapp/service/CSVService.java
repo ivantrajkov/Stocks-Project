@@ -4,7 +4,7 @@ import mk.finki.ukim.dians.stocksapp.model.StockData;
 
 import java.util.List;
 
-public interface csvService {
+public interface CSVService {
     /**
      * Generates a CSV file from a list of StockData.
      * This method converts a list of `StockData` objects into a CSV format with the appropriate columns.

@@ -24,7 +24,6 @@ const Analyze = () => {
     const [oscillatorSignal, setOscillatorSignal] = useState(null);
     const [movingAverageSignal, setMovingAverageSignal] = useState(null);
 
-    // Function to render a gauge for the oscillator signal
     const renderGauge = (signal, label) => {
         return (
             <div style={{width:'300px',height:'300px'}}>
@@ -74,122 +73,14 @@ const Analyze = () => {
         fetchStockSymbols();
     }, []);
 
-    const fetchRsiValue = async () => {
+    const fetchIndicator = async (indicator, setState) => {
         try {
-            const response = await fetch(`http://localhost:8080/api/indicator?symbol=${selectedStockSymbol}&period=${period}&indicator=rsi`);
+            const response = await fetch(`http://localhost:8080/api/indicator?symbol=${selectedStockSymbol}&period=${period}&indicator=${indicator}`);
             if (!response.ok) {
-                throw new Error('Failed to fetch RSI value');
+                throw new Error(`Failed to fetch ${indicator} value`);
             }
             const data = await response.json();
-            setRsiValue(data);
-        } catch (error) {
-            setError(error.message);
-        }
-    };
-    const fetchStochasticValue = async () => {
-        try {
-            const response = await fetch(`http://localhost:8080/api/indicator?symbol=${selectedStockSymbol}&period=${period}&indicator=stochastic`);
-            if (!response.ok) {
-                throw new Error('Failed to fetch stochatic %K value');
-            }
-            const data = await response.json();
-            setStochastic(data);
-        } catch (error) {
-            setError(error.message);
-        }
-    };
-    const fetchRateOfChange = async () => {
-        try {
-            const response = await fetch(`http://localhost:8080/api/indicator?symbol=${selectedStockSymbol}&period=${period}&indicator=roc`);
-            if (!response.ok) {
-                throw new Error('Failed to fetch rate of change value');
-            }
-            const data = await response.json();
-            setRoc(data);
-        } catch (error) {
-            setError(error.message);
-        }
-    };
-    const fetchMomentum = async () => {
-        try {
-            const response = await fetch(`http://localhost:8080/api/indicator?symbol=${selectedStockSymbol}&period=${period}&indicator=momentum`);
-            if (!response.ok) {
-                throw new Error('Failed to fetch rate of change value');
-            }
-            const data = await response.json();
-            setMomentum(data);
-        } catch (error) {
-            setError(error.message);
-        }
-    };
-    const fetchSimpleMovingAverage = async () => {
-        try {
-            const response = await fetch(`http://localhost:8080/api/indicator?symbol=${selectedStockSymbol}&period=${period}&indicator=sma`);
-            if (!response.ok) {
-                throw new Error('Failed to fetch rate of change value');
-            }
-            const data = await response.json();
-            setSma(data);
-        } catch (error) {
-            setError(error.message);
-        }
-    };
-    const fetchCMO = async () => {
-        try {
-            const response = await fetch(`http://localhost:8080/api/indicator?symbol=${selectedStockSymbol}&period=${period}&indicator=cmo`);
-            if (!response.ok) {
-                throw new Error('Failed to fetch rate of change value');
-            }
-            const data = await response.json();
-            setCmo(data);
-        } catch (error) {
-            setError(error.message);
-        }
-    };
-    const fetchEMA = async () => {
-        try {
-            const response = await fetch(`http://localhost:8080/api/indicator?symbol=${selectedStockSymbol}&period=${period}&indicator=ema`);
-            if (!response.ok) {
-                throw new Error('Failed to fetch EMA value');
-            }
-            const data = await response.json();
-            setEma(data);
-        } catch (error) {
-            setError(error.message);
-        }
-    };
-    const fetchWMA = async () => {
-        try {
-            const response = await fetch(`http://localhost:8080/api/indicator?symbol=${selectedStockSymbol}&period=${period}&indicator=wma`);
-            if (!response.ok) {
-                throw new Error('Failed to fetch EMA value');
-            }
-            const data = await response.json();
-            setWma(data);
-        } catch (error) {
-            setError(error.message);
-        }
-    };
-    const fetchTMA = async () => {
-        try {
-            const response = await fetch(`http://localhost:8080/api/indicator?symbol=${selectedStockSymbol}&period=${period}&indicator=tma`);
-            if (!response.ok) {
-                throw new Error('Failed to fetch EMA value');
-            }
-            const data = await response.json();
-            setTma(data);
-        } catch (error) {
-            setError(error.message);
-        }
-    };
-    const fetchKAMA = async () => {
-        try {
-            const response = await fetch(`http://localhost:8080/api/indicator?symbol=${selectedStockSymbol}&period=${period}&indicator=kama`);
-            if (!response.ok) {
-                throw new Error('Failed to fetch EMA value');
-            }
-            const data = await response.json();
-            setKama(data);
+            setState(data);
         } catch (error) {
             setError(error.message);
         }
@@ -202,7 +93,6 @@ const Analyze = () => {
             }
             const data = await response.text();
             setOscillatorSignal(data);
-            // console.log(`http://localhost:8080/api/oscillators?rsi=${rsiValue}&stochastic=${stochastic}&rateOfChange=${roc}&momentum=${momentum}&chande=${cmo}`)
         } catch (error) {
             setError(error.message);
         }
@@ -222,33 +112,19 @@ const Analyze = () => {
 
 
     useEffect(() => {
-        if (selectedStockSymbol && period){
-            fetchRsiValue();
-            fetchStochasticValue();
-            fetchRateOfChange();
-            fetchMomentum();
-            fetchSimpleMovingAverage();
-            fetchCMO();
-            fetchEMA();
-            fetchWMA();
-            fetchTMA();
-            fetchKAMA();
-
+        if (selectedStockSymbol && period) {
+            fetchIndicator('rsi', setRsiValue);
+            fetchIndicator('stochastic', setStochastic);
+            fetchIndicator('roc', setRoc);
+            fetchIndicator('momentum', setMomentum);
+            fetchIndicator('sma', setSma);
+            fetchIndicator('cmo', setCmo);
+            fetchIndicator('ema', setEma);
+            fetchIndicator('wma', setWma);
+            fetchIndicator('tma', setTma);
+            fetchIndicator('kama', setKama);
         }
-    }, [selectedStockSymbol,period,cmo]);
-
-    // useEffect(() => {
-    //     console.log(rsiValue + " " + momentum + " " + stochastic + " " + cmo + " " + roc)
-    //     if(rsiValue && momentum && stochastic && cmo && roc){
-    //         fetchOscillatorSignal();
-    //     }
-    //     fetchOscillatorSignal();
-    // }, [rsiValue, cmo,stochastic,momentum,roc]);
-
-
-
-
-
+    }, [selectedStockSymbol, period]);
 
     return (
         <>
@@ -360,10 +236,6 @@ const Analyze = () => {
                         {kama !== null ? `Kaufman's Adaptive Moving Average, for ${period} day(s): ${kama}` : error ? `Error: ${error}` : "Loading..."}
                     </div>
                 </div>
-                {/*<div className={"analyzeGraph"}>*/}
-                {/*    {oscillatorSignal != null ? `Oscillator signal is: ${oscillatorSignal}` : error ? `Error: ${error}` : "Loading..."}*/}
-                {/*    {movingAverageSignal != null ? `Moving averages signal is: ${movingAverageSignal}` : error ? `Error: ${error}` : "Loading..."}*/}
-                {/*</div>*/}
             </div>
 
             <div className="section">

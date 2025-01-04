@@ -1,14 +1,14 @@
 package mk.finki.ukim.dians.stocksapp.service.implementation;
 
 import mk.finki.ukim.dians.stocksapp.model.StockData;
-import mk.finki.ukim.dians.stocksapp.service.csvService;
+import mk.finki.ukim.dians.stocksapp.service.CSVService;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Service
-public class csvServiceImpl implements csvService {
+public class CSVServiceImpl implements CSVService {
     public byte[] generateCSV(List<StockData> stockData) {
         StringBuilder csvBuilder = new StringBuilder();
         csvBuilder.append("ID,Date,Last Transaction Price,Max Price,Min Price,Average Price,Percentage Change,Quantity,Best Turnover,Total Turnover,Stock Symbol\n");
