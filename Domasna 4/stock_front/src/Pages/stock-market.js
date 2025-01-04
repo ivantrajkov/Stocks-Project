@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
-import './css/stock-market.css';
+import '../css/stock-market.css';
+import NavBar from "../components/NavBar/NavBar";
+// import useFetchStockSymbols from '../hooks/useFetchStockSymbols';
 
 const StockMarket = () => {
     const [tableData, setTableData] = useState([]);
@@ -103,16 +105,8 @@ const StockMarket = () => {
 
     return (
         <>
-            <nav className="navbar">
-                <img src="resources/logo.png" alt="StocksAppMK Logo" />
-                <div>
-                    <Link to="/">Home</Link>
-                    <Link to="/stock-market" style={{ backgroundColor: '#d3d3d3' }}>Stock market</Link>
-                    <Link to="/analyze">Analyze</Link>
-                    <Link to="/login">Login</Link>
-                    <Link to="/Register">Register</Link>
-                </div>
-            </nav>
+
+            <NavBar/>
 
             <div className="table-section">
                 <h2>Stock view</h2>
@@ -187,10 +181,6 @@ const StockMarket = () => {
                 )}
             </div>
 
-            {/*<div className="section">*/}
-            {/*    <img src="/resources/logo.png" alt="StocksAppMK Logo" style={{ width: '250px', height: '250px' }} />*/}
-            {/*    <img src="/resources/trust.jpg" alt="StocksAppMK Logo" style={{ width: '250px', height: '250px' }} />*/}
-            {/*</div>*/}
         </>
     );
 };

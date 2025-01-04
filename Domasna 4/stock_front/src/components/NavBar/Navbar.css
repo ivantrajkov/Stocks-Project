@@ -12,6 +12,9 @@
     width: 100px;
     height: auto;
 }
+#home{
+    backgroundColor: '#d3d3d3'
+}
 
 .navbar a {
     text-decoration: none;
@@ -28,49 +31,4 @@
     background-color: #d3d3d3;
     color: #333;
     border-color: #bbb;
-}
-.home{
-    background-color: #d3d3d3;
-}
-
-
-.hero {
-    text-align: center;
-    padding: 50px;
-    background-color: #f4f4f4;
-    height: 350px;
-}
-
-.hero h1 {
-    font-size: 48px;
-    margin-top: 100px;
-}
-
-.hero p {
-    font-size: 18px;
-    color: #555;
-}
-
-
-.footer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    background-color: #ffe5e5;
-    height: 330px;
-}
-
-.footer img {
-    width: 300px;
-    height: auto;
-    margin-right: 20px;
-}
-
-.footer .text {
-    font-size: 18px;
-    font-weight: bold;
-}
-img{
-    width: 100px;
 }

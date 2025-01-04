@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 import { Link } from "react-router-dom";
-import './css/login.css';
+import '../css/login.css';
+import NavBar from "../components/NavBar/NavBar";
+import Footer from "../components/Footer/Footer";
 
 
 const Register = () => {
@@ -38,16 +40,17 @@ const Register = () => {
 
     return (
         <>
-            <nav className="navbar">
-                <img src="/resources/logo.png" alt="StocksAppMK Logo"/>
-                <div>
-                    <Link to="/">Home</Link>
-                    <Link to="/stock-market">Stock market</Link>
-                    <Link to="/analyze">Analyze</Link>
-                    <Link to="/login">Login</Link>
-                    <Link to="/register" style={{ backgroundColor: '#d3d3d3' }}>Register</Link>
-                </div>
-            </nav>
+            {/*<nav className="navbar">*/}
+            {/*    <img src="/resources/logo.png" alt="StocksAppMK Logo"/>*/}
+            {/*    <div>*/}
+            {/*        <Link to="/">Home</Link>*/}
+            {/*        <Link to="/stock-market">Stock market</Link>*/}
+            {/*        <Link to="/analyze">Analyze</Link>*/}
+            {/*        <Link to="/login">Login</Link>*/}
+            {/*        <Link to="/register" style={{ backgroundColor: '#d3d3d3' }}>Register</Link>*/}
+            {/*    </div>*/}
+            {/*</nav>*/}
+            <NavBar/>
 
 
             <div className="login">
@@ -58,10 +61,7 @@ const Register = () => {
                 <input type={"button"} value={"Register"} onClick={handleRegister}/>
             </div>
 
-            <div className="section">
-                <img src="/resources/logo.png" alt="StocksAppMK Logo" style={{width: '250px', height: '250px'}}/>
-                <img src="/resources/trust.jpg" alt="StocksAppMK Logo" style={{width: '250px', height: '250px'}}/>
-            </div>
+            <Footer/>
         </>
     );
 };

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { useLocation, Link } from "react-router-dom";
 import queryString from "query-string";
+import NavBar from "../components/NavBar/NavBar";
+import Footer from "../components/Footer/Footer";
 
 const StockGraph = () => {
     const [chartData, setChartData] = useState([]);
@@ -37,16 +39,17 @@ const StockGraph = () => {
 
     return (
         <>
-            <nav className="navbar">
-                <img src="/resources/logo.png" alt="StocksAppMK Logo"/>
-                <div>
-                    <Link to="/">Home</Link>
-                    <Link to="/stock-market">Stock market</Link>
-                    <Link to="/Analyze">Analyze</Link>
-                    <Link to="/login">Login</Link>
-                    <Link to="/Register">Register</Link>
-                </div>
-            </nav>
+            {/*<nav className="navbar">*/}
+            {/*    <img src="/resources/logo.png" alt="StocksAppMK Logo"/>*/}
+            {/*    <div>*/}
+            {/*        <Link to="/">Home</Link>*/}
+            {/*        <Link to="/stock-market">Stock market</Link>*/}
+            {/*        <Link to="/Analyze">Analyze</Link>*/}
+            {/*        <Link to="/login">Login</Link>*/}
+            {/*        <Link to="/Register">Register</Link>*/}
+            {/*    </div>*/}
+            {/*</nav>*/}
+            <NavBar/>
             <ResponsiveContainer width="100%" height={400}>
                 <LineChart data={chartData}>
                     <CartesianGrid strokeDasharray="3 3"/>
@@ -57,10 +60,7 @@ const StockGraph = () => {
                     <Line type="monotone" dataKey="average" stroke="#8884d8" activeDot={{r: 8}}/>
                 </LineChart>
             </ResponsiveContainer>
-            <div className="section">
-                <img src="/resources/logo.png" alt="StocksAppMK Logo" style={{width: '250px', height: '250px'}}/>
-                <img src="/resources/trust.jpg" alt="StocksAppMK Logo" style={{width: '250px', height: '250px'}}/>
-            </div>
+            <Footer/>
         </>
     );
 };

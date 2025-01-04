@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
-import './css/login.css';
+import '../css/login.css';
+import NavBar from "../components/NavBar/NavBar";
+import Footer from "../components/Footer/Footer";
 
 const Login = () => {
     const [username, setUsername] = useState('');
@@ -38,16 +40,7 @@ const Login = () => {
 
     return (
         <>
-            <nav className="navbar">
-                <img src="/resources/logo.png" alt="StocksAppMK Logo" />
-                <div>
-                    <Link to="/">Home</Link>
-                    <Link to="/stock-market">Stock market</Link>
-                    <Link to="/analyze">Analyze</Link>
-                    <Link to="/login" style={{ backgroundColor: '#d3d3d3' }}>Login</Link>
-                    <Link to="/register">Register</Link>
-                </div>
-            </nav>
+            <NavBar/>
 
             <div className="login">
                 <label htmlFor={"username"}>Username:</label>
@@ -74,10 +67,7 @@ const Login = () => {
                 )}
             </div>
 
-            <div className="section">
-                <img src="/resources/logo.png" alt="StocksAppMK Logo" style={{ width: '250px', height: '250px' }} />
-                <img src="/resources/trust.jpg" alt="StocksAppMK Logo" style={{ width: '250px', height: '250px' }} />
-            </div>
+            <Footer/>
         </>
     );
 };

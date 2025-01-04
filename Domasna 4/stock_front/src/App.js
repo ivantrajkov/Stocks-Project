@@ -2,13 +2,13 @@ import logo from './logo.svg';
 import './App.css';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
-import Home from "./Home";
+import Home from "./Pages/Home";
 import List from "./List";
-import StockMarket from "./stock-market";
-import Login from "./Login";
-import Graph from "./Graph";
-import Analyze from "./Analyze";
-import Register from "./Register";
+import StockMarket from "./Pages/stock-market";
+import Login from "./Pages/Login";
+import Graph from "./Pages/Graph";
+import Analyze from "./Pages/Analyze";
+import Register from "./Pages/Register";
 
 function App() {
     return (

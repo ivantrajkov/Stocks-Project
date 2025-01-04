@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from "react-router-dom";
-import './css/home.css';
+import NavBar from "../components/NavBar/NavBar";
+import Footer from "../components/Footer/Footer";
+import "../css/home.css"
 
 const Home = () => {
     const [username, setUsername] = useState(null);
@@ -34,17 +36,7 @@ const Home = () => {
 
     return (
         <>
-            <nav className="navbar">
-                <img src="/resources/logo.png" alt="StocksAppMK Logo"/>
-                <div>
-                    <Link to="/" style={{ backgroundColor: '#d3d3d3' }}>Home</Link>
-                    <Link to="/stock-market">Stock market</Link>
-                    <Link to="/Analyze">Analyze</Link>
-                    <Link to="/Login">Login</Link>
-                    <Link to="/Register">Register</Link>
-
-                </div>
-            </nav>
+                <NavBar />
 
             <div className="hero" style={{height: '350px'}}>
                 <h1>StocksAppMK</h1>
@@ -61,10 +53,7 @@ const Home = () => {
                 <button onClick={handleDownloadCSV}>Get a CSV file!</button>
             </div>
 
-            <div className="section">
-                <img src="/resources/logo.png" alt="StocksAppMK Logo" style={{width: '250px', height: '250px'}}/>
-                <img src="/resources/trust.jpg" alt="StocksAppMK Logo" style={{width: '250px', height: '250px'}}/>
-            </div>
+            <Footer/>
         </>
     );
 };

@@ -2,7 +2,9 @@ import {Link} from "react-router-dom";
 import Home from "./Home";
 import React, {useEffect, useState} from "react";
 import ReactGaugeChart from "react-gauge-chart";
-import './css/analyze.css';
+import '../css/analyze.css';
+import NavBar from "../components/NavBar/NavBar";
+import Footer from "../components/Footer/Footer";
 
 
 
@@ -24,6 +26,7 @@ const Analyze = () => {
     const [oscillatorSignal, setOscillatorSignal] = useState(null);
     const [movingAverageSignal, setMovingAverageSignal] = useState(null);
 
+    // Function to render the gauge chart for a given signal
     const renderGauge = (signal, label) => {
         return (
             <div style={{width:'300px',height:'300px'}}>
@@ -43,6 +46,7 @@ const Analyze = () => {
         );
     };
 
+    // Function to determine the gauge value based on the signal (Buy, Neutral, Sell)
     const getGaugeValue = (signal) => {
         switch (signal) {
             case 'Buy':
@@ -56,6 +60,7 @@ const Analyze = () => {
         }
     };
 
+    // useEffect hook to fetch the stock symbols from the backend
     useEffect(() => {
         const fetchStockSymbols = async () => {
             try {
@@ -73,6 +78,7 @@ const Analyze = () => {
         fetchStockSymbols();
     }, []);
 
+    // Function to fetch a specific technical indicator from the backend and set the corresponding state
     const fetchIndicator = async (indicator, setState) => {
         try {
             const response = await fetch(`http://localhost:8080/api/indicator?symbol=${selectedStockSymbol}&period=${period}&indicator=${indicator}`);
@@ -85,6 +91,7 @@ const Analyze = () => {
             setError(error.message);
         }
     };
+    // Function to fetch the oscillator signal from the backend, which is combined from all oscillators
     const fetchOscillatorSignal = async () => {
         try {
             const response = await fetch(`http://localhost:8080/api/oscillators?rsi=${rsiValue}&stochastic=${stochastic}&rateOfChange=${roc}&momentum=${momentum}&chande=${cmo}`);
@@ -97,6 +104,7 @@ const Analyze = () => {
             setError(error.message);
         }
     };
+    // Function to fetch the moving average signal from the backend, which is combined from all moving averages
     const fetchMovingAverageSignal = async () => {
         try {
             const response = await fetch(`http://localhost:8080/api/movingAverages?symbol=${selectedStockSymbol}&sma=${sma}&ema=${ema}&wma=${wma}&tma=${tma}&kama=${kama}`);
@@ -110,7 +118,7 @@ const Analyze = () => {
         }
     };
 
-
+    // useEffect hook to fetch all indicators whenever the selected stock symbol or period changes
     useEffect(() => {
         if (selectedStockSymbol && period) {
             fetchIndicator('rsi', setRsiValue);
@@ -128,16 +136,8 @@ const Analyze = () => {
 
     return (
         <>
-            <nav className="navbar">
-                <img src="/resources/logo.png" alt="StocksAppMK Logo"/>
-                <div>
-                    <Link to="/">Home</Link>
-                    <Link to="/stock-market">Stock market</Link>
-                    <Link to="/Analyze" style={{backgroundColor: '#d3d3d3'}}npm start>Analyze</Link>
-                    <Link to="/Login">Login</Link>
-                    <Link to="/Register">Register</Link>
-                </div>
-            </nav>
+
+            <NavBar/>
             <div className={"hero"}>
                 <div className={"optionContainer"}>
                     <h3>Choose a stock to analyze</h3>
@@ -177,72 +177,24 @@ const Analyze = () => {
                 </div>
 
 
-                <div style={{float: "left"}}>
-                    <div>
-                        {rsiValue !== null ? `RSI Index for ${period} day(s): ${rsiValue}` : error ? `Error: ${error}` : "Loading..."}
-                    </div>
-                </div>
-                <br/>
-                <div style={{float: "left"}}>
-                    <div>
-                        {stochastic !== null ? `Stochastic %K for ${period} day(s): ${stochastic}` : error ? `Error: ${error}` : "Loading..."}
-                    </div>
-                </div>
-                <br/>
-                <div style={{float: "left"}}>
-                    <div>
-                        {roc !== null ? `Rate of change for ${period} day(s): ${roc}%` : error ? `Error: ${error}` : "Loading..."}
-                    </div>
-                </div>
-                <br/>
-                <div style={{float: "left"}}>
-                    <div>
-                        {momentum !== null ? `Momentum for ${period} day(s): ${momentum}` : error ? `Error: ${error}` : "Loading..."}
-                    </div>
-                </div>
-                <br/>
-                <div style={{float: "left"}}>
-                    <div>
-                        {sma !== null ? `Simple moving average for ${period} day(s): ${sma}` : error ? `Error: ${error}` : "Loading..."}
-                    </div>
-                </div>
-                <br/>
-                <div style={{float: "left"}}>
-                    <div>
-                        {cmo !== null ? `Chande momentum oscillator for ${period} day(s): ${cmo}` : error ? `Error: ${error}` : "Loading..."}
-                    </div>
-                </div>
-                <br/>
-                <div style={{float: "left"}}>
-                    <div>
-                        {ema !== null ? `Exponential moving average for ${period} day(s): ${ema}` : error ? `Error: ${error}` : "Loading..."}
-                    </div>
-                </div>
-                <br/>
-                <div style={{float: "left"}}>
-                    <div>
-                        {wma !== null ? `Weighted moving average for ${period} day(s): ${wma}` : error ? `Error: ${error}` : "Loading..."}
-                    </div>
-                </div>
-                <br/>
-                <div style={{float: "left"}}>
-                    <div>
-                        {tma !== null ? ` Triangular Moving Average for ${period} day(s): ${tma}` : error ? `Error: ${error}` : "Loading..."}
-                    </div>
-                </div>
-                <br/>
-                <div style={{float: "left"}}>
-                    <div>
-                        {kama !== null ? `Kaufman's Adaptive Moving Average, for ${period} day(s): ${kama}` : error ? `Error: ${error}` : "Loading..."}
-                    </div>
+                <div style={{float: "left", textAlign: "left"}}>
+                    {rsiValue !== null ? `RSI Index for ${period} day(s): ${rsiValue}` : error ? `Error: ${error}` : "Loading..."}<br/>
+                    {stochastic !== null ? `Stochastic %K for ${period} day(s): ${stochastic}` : error ? `Error: ${error}` : "Loading..."}<br/>
+                    {roc !== null ? `Rate of change for ${period} day(s): ${roc}%` : error ? `Error: ${error}` : "Loading..."}<br/>
+                    {momentum !== null ? `Momentum for ${period} day(s): ${momentum}` : error ? `Error: ${error}` : "Loading..."}<br/>
+                    {sma !== null ? `Simple moving average for ${period} day(s): ${sma}` : error ? `Error: ${error}` : "Loading..."}<br/>
+                    {cmo !== null ? `Chande momentum oscillator for ${period} day(s): ${cmo}` : error ? `Error: ${error}` : "Loading..."}<br/>
+                    {ema !== null ? `Exponential moving average for ${period} day(s): ${ema}` : error ? `Error: ${error}` : "Loading..."}<br/>
+                    {wma !== null ? `Weighted moving average for ${period} day(s): ${wma}` : error ? `Error: ${error}` : "Loading..."}<br/>
+                    {tma !== null ? ` Triangular Moving Average for ${period} day(s): ${tma}` : error ? `Error: ${error}` : "Loading..."}<br/>
+                    {kama !== null ? `Kaufman's Adaptive Moving Average, for ${period} day(s): ${kama}` : error ? `Error: ${error}` : "Loading..."}<br/>
+
                 </div>
             </div>
 
-            <div className="section">
-                <img src="/resources/logo.png" alt="StocksAppMK Logo" style={{width: '250px', height: '250px'}}/>
-                <img src="/resources/trust.jpg" alt="StocksAppMK Logo" style={{width: '250px', height: '250px'}}/>
+            <div style={{marginRight: "5px"}}>
+            <Footer/>
             </div>
-
         </>
     )
 }
