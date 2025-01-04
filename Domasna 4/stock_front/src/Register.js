@@ -13,7 +13,7 @@ const Register = () => {
         }
 
         try {
-            const response = await fetch(`http://localhost:8080/api/register?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`, {
+            const response = await fetch(`http://localhost:8080/authentication/register?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

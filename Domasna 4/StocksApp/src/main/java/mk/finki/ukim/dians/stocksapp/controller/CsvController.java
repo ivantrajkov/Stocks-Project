@@ -30,6 +30,9 @@ public class CsvController {
         this.csvService = csvService;
     }
 
+    /**
+     * Prepares the headers and the csv data for download
+     */
     @GetMapping
     public ResponseEntity<byte[]> downloadCSV() {
         List<StockData> stockData = stockService.getAllStockData();

@@ -20,7 +20,6 @@ public interface StockService {
 //    Optional<StockData> getStockDataById(Long id);
     /**
      * Retrieves stock data based on the provided filters.
-     * The parameters can be null, specifying that we are not going to filter by that parameter.
      * @param symbol the stock symbol to filter by.
      * @param avgPrice the average price to filter by.
      * @param fromDate the start date of the range to filter by.

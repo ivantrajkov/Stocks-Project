@@ -14,8 +14,7 @@ const Login = () => {
             return;
         }
 
-        // Basic Fetch API usage
-        fetch('http://localhost:8080/api/login', {
+        fetch('http://localhost:8080/authentication/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',

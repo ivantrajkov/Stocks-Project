@@ -6,7 +6,7 @@ const Home = () => {
     const [username, setUsername] = useState(null);
 
     useEffect(() => {
-        fetch('http://localhost:8080/api/loggedIn')
+        fetch('http://localhost:8080/authentication/loggedIn')
             .then((response) => response.text())
             .then((data) => setUsername(data))
             .catch((error) => console.error('Error getting the username!', error));

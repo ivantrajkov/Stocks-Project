@@ -76,7 +76,7 @@ const Analyze = () => {
 
     const fetchRsiValue = async () => {
         try {
-            const response = await fetch(`http://localhost:8080/api/rsi?symbol=${selectedStockSymbol}&period=${period}`);
+            const response = await fetch(`http://localhost:8080/api/indicator?symbol=${selectedStockSymbol}&period=${period}&indicator=rsi`);
             if (!response.ok) {
                 throw new Error('Failed to fetch RSI value');
             }
@@ -88,7 +88,7 @@ const Analyze = () => {
     };
     const fetchStochasticValue = async () => {
         try {
-            const response = await fetch(`http://localhost:8080/api/stochastic?symbol=${selectedStockSymbol}&period=${period}`);
+            const response = await fetch(`http://localhost:8080/api/indicator?symbol=${selectedStockSymbol}&period=${period}&indicator=stochastic`);
             if (!response.ok) {
                 throw new Error('Failed to fetch stochatic %K value');
             }
@@ -100,7 +100,7 @@ const Analyze = () => {
     };
     const fetchRateOfChange = async () => {
         try {
-            const response = await fetch(`http://localhost:8080/api/roc?symbol=${selectedStockSymbol}&period=${period}`);
+            const response = await fetch(`http://localhost:8080/api/indicator?symbol=${selectedStockSymbol}&period=${period}&indicator=roc`);
             if (!response.ok) {
                 throw new Error('Failed to fetch rate of change value');
             }
@@ -112,7 +112,7 @@ const Analyze = () => {
     };
     const fetchMomentum = async () => {
         try {
-            const response = await fetch(`http://localhost:8080/api/momentum?symbol=${selectedStockSymbol}&period=${period}`);
+            const response = await fetch(`http://localhost:8080/api/indicator?symbol=${selectedStockSymbol}&period=${period}&indicator=momentum`);
             if (!response.ok) {
                 throw new Error('Failed to fetch rate of change value');
             }
@@ -124,7 +124,7 @@ const Analyze = () => {
     };
     const fetchSimpleMovingAverage = async () => {
         try {
-            const response = await fetch(`http://localhost:8080/api/sma?symbol=${selectedStockSymbol}&period=${period}`);
+            const response = await fetch(`http://localhost:8080/api/indicator?symbol=${selectedStockSymbol}&period=${period}&indicator=sma`);
             if (!response.ok) {
                 throw new Error('Failed to fetch rate of change value');
             }
@@ -136,7 +136,7 @@ const Analyze = () => {
     };
     const fetchCMO = async () => {
         try {
-            const response = await fetch(`http://localhost:8080/api/cmo?symbol=${selectedStockSymbol}&period=${period}`);
+            const response = await fetch(`http://localhost:8080/api/indicator?symbol=${selectedStockSymbol}&period=${period}&indicator=cmo`);
             if (!response.ok) {
                 throw new Error('Failed to fetch rate of change value');
             }
@@ -148,7 +148,7 @@ const Analyze = () => {
     };
     const fetchEMA = async () => {
         try {
-            const response = await fetch(`http://localhost:8080/api/ema?symbol=${selectedStockSymbol}&period=${period}`);
+            const response = await fetch(`http://localhost:8080/api/indicator?symbol=${selectedStockSymbol}&period=${period}&indicator=ema`);
             if (!response.ok) {
                 throw new Error('Failed to fetch EMA value');
             }
@@ -160,7 +160,7 @@ const Analyze = () => {
     };
     const fetchWMA = async () => {
         try {
-            const response = await fetch(`http://localhost:8080/api/wma?symbol=${selectedStockSymbol}&period=${period}`);
+            const response = await fetch(`http://localhost:8080/api/indicator?symbol=${selectedStockSymbol}&period=${period}&indicator=wma`);
             if (!response.ok) {
                 throw new Error('Failed to fetch EMA value');
             }
@@ -172,7 +172,7 @@ const Analyze = () => {
     };
     const fetchTMA = async () => {
         try {
-            const response = await fetch(`http://localhost:8080/api/tma?symbol=${selectedStockSymbol}&period=${period}`);
+            const response = await fetch(`http://localhost:8080/api/indicator?symbol=${selectedStockSymbol}&period=${period}&indicator=tma`);
             if (!response.ok) {
                 throw new Error('Failed to fetch EMA value');
             }
@@ -184,7 +184,7 @@ const Analyze = () => {
     };
     const fetchKAMA = async () => {
         try {
-            const response = await fetch(`http://localhost:8080/api/kama?symbol=${selectedStockSymbol}&period=${period}`);
+            const response = await fetch(`http://localhost:8080/api/indicator?symbol=${selectedStockSymbol}&period=${period}&indicator=kama`);
             if (!response.ok) {
                 throw new Error('Failed to fetch EMA value');
             }

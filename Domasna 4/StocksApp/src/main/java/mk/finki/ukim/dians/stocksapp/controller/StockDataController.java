@@ -33,7 +33,7 @@ public class StockDataController {
     }
 
     /**
-     *  Returns all the stock data
+     *  Returns all the stock data, or it filters by the parameters which are not null
      */
     @GetMapping("/all")
 public ResponseEntity<List<StockData>> listAll(
@@ -90,208 +90,40 @@ public ResponseEntity<List<StockData>> listAll(
         return new ResponseEntity<>(stockSymbols,HttpStatus.OK);
 
     }
+
     /**
-     * Returns the RSI index for a stock symbol and the period specified by the period parameter
+     *
+     * @param symbol the stock for which we are going to calculate
+     * @param period the period for which we are going to calculate
+     * @param indicator the technical oscillator or moving average we calculate
+     * @return the index value for that indicator
      */
-    @GetMapping("/rsi")
-    public ResponseEntity<BigDecimal> getRsi(
+    @GetMapping("/indicator")
+    public ResponseEntity<BigDecimal> getIndicator(
             @RequestParam String symbol,
-            @RequestParam int period
+            @RequestParam int period,
+            @RequestParam String indicator
     ){
         List<StockData> listData = stockService.getByStockSymbol(symbol);
         List<BigDecimal> prices = stockService.getLastTransactionPrices(listData);
 
         Collections.reverse(prices);
+        BigDecimal index = BigDecimal.valueOf(0);
+        index = switch (indicator) {
+            case "rsi" -> stockAnalysisService.calculateRSI(prices, period);
+            case "stochastic" -> stockAnalysisService.calculateStochasticK(prices, period);
+            case "roc" -> stockAnalysisService.calculateROC(prices, period);
+            case "momentum" -> stockAnalysisService.calculateMomentum(prices, period);
+            case "sma" -> stockAnalysisService.calculateSMAOscillator(prices, period);
+            case "cmo" -> stockAnalysisService.calculateCMO(prices, period);
+            case "ema" -> stockAnalysisService.calculateEMA(prices, period);
+            case "wma" -> stockAnalysisService.calculateWMA(prices, period);
+            case "tma" -> stockAnalysisService.calculateTMA(prices, period);
+            case "kama" -> stockAnalysisService.calculateKAMA(prices, period);
+            default -> index;
+        };
 
-        BigDecimal rsiIndex = stockAnalysisService.calculateRSI(prices,period);
-
-        return new ResponseEntity<>(rsiIndex,HttpStatus.OK);
-    }
-
-    /**
-     Returns the stochacstic index for a stock symbol and the period specified by the period parameter
-     */
-    @GetMapping("/stochastic")
-    public ResponseEntity<BigDecimal> getStochastic(
-            @RequestParam String symbol,
-            @RequestParam int period
-    ) {
-        List<StockData> listData = stockService.getByStockSymbol(symbol);
-        List<BigDecimal> prices = stockService.getLastTransactionPrices(listData);
-
-        Collections.reverse(prices);
-        BigDecimal stochasticK = stockAnalysisService.calculateStochasticK(prices,period);
-        return new ResponseEntity<>(stochasticK,HttpStatus.OK);
-    }
-
-
-    @PostMapping("/register")
-    public ResponseEntity<Map<String, String>> register(
-            @RequestParam String username,
-            @RequestParam String password
-    ) {
-        User user = new User(username, password);
-        userService.addUser(user);
-        Map<String, String> response = new HashMap<>();
-        response.put("redirect", "/login");
-        return new ResponseEntity<>(response,HttpStatus.OK);
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<String> login(
-            @RequestParam String username,
-            @RequestParam String password
-    ) {
-        Optional<User> userOpt = Optional.ofNullable(userService.isLoggedIn());
-        if(userOpt.isPresent()){
-            User user = userOpt.get();
-            user.setLoggedIn(false);
-            userService.addUser(user);
-        }
-        return userService.getByUsername(username)
-                .map(user -> {
-                    if (user.getPassword().equals(password)) {
-                        user.setLoggedIn(true);
-                        userService.addUser(user);
-                        return new ResponseEntity<>("Login successful",HttpStatus.OK);
-                    }
-                    return ResponseEntity.badRequest().body("Invalid password");
-                })
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found"));
-    }
-
-    @GetMapping("/loggedIn")
-    public ResponseEntity<String> getLoggedInfo(){
-        User user = userService.isLoggedIn();
-        if(user == null){
-            return new ResponseEntity<>("Guest",HttpStatus.OK);
-        } else {
-
-        }return new ResponseEntity<>(user.getUsername(),HttpStatus.OK);
-    }
-    /**
-     * Returns the ROC index for a stock symbol and the period specified by the period parameter
-     */
-    @GetMapping("/roc")
-    public ResponseEntity<BigDecimal> getRoc(
-            @RequestParam String symbol,
-            @RequestParam int period
-    ){
-        List<StockData> listData = stockService.getByStockSymbol(symbol);
-        List<BigDecimal> prices = stockService.getLastTransactionPrices(listData);
-
-        Collections.reverse(prices);
-        BigDecimal roc = stockAnalysisService.calculateROC(prices,period);
-        return new ResponseEntity<>(roc,HttpStatus.OK);
-    }
-
-    /**
-     * Returns the momentum index for a stock symbol and the period specified by the period parameter
-     */
-    @GetMapping("/momentum")
-    public ResponseEntity<BigDecimal> getMomentum(
-            @RequestParam String symbol,
-            @RequestParam int period
-    ){
-        List<StockData> listData = stockService.getByStockSymbol(symbol);
-
-        List<BigDecimal> prices = stockService.getLastTransactionPrices(listData);
-        Collections.reverse(prices);
-        BigDecimal momentum = stockAnalysisService.calculateMomentum(prices,period);
-        return new ResponseEntity<>(momentum,HttpStatus.OK);
-    }
-
-    /**
-     * Returns the SMA index for a stock symbol and the period specified by the period parameter
-     */
-    @GetMapping("/sma")
-    public ResponseEntity<BigDecimal> getSimpleMovingAverage(
-            @RequestParam String symbol,
-            @RequestParam int period
-    ){
-        List<StockData> listData = stockService.getByStockSymbol(symbol);
-        List<BigDecimal> prices = stockService.getLastTransactionPrices(listData);
-
-        Collections.reverse(prices);
-        BigDecimal sma = stockAnalysisService.calculateSMAOscillator(prices,period);
-        return new ResponseEntity<>(sma,HttpStatus.OK);
-    }
-    /**
-     * Returns the CMO index for a stock symbol and the period specified by the period parameter
-     */
-    @GetMapping("/cmo")
-    public ResponseEntity<BigDecimal> getCMO(
-            @RequestParam String symbol,
-            @RequestParam int period
-    ){
-        List<StockData> listData = stockService.getByStockSymbol(symbol);
-
-        List<BigDecimal> prices = stockService.getLastTransactionPrices(listData);
-        Collections.reverse(prices);
-        BigDecimal cmo = stockAnalysisService.calculateCMO(prices,period);
-        return new ResponseEntity<>(cmo,HttpStatus.OK);
-    }
-    /**
-     * Returns the EMA index for a stock symbol and the period specified by the period parameter
-     */
-    @GetMapping("/ema")
-    public ResponseEntity<BigDecimal> getEMA(
-            @RequestParam String symbol,
-            @RequestParam int period
-    ){
-        List<StockData> listData = stockService.getByStockSymbol(symbol);
-
-        List<BigDecimal> prices = stockService.getLastTransactionPrices(listData);
-        Collections.reverse(prices);
-        BigDecimal ema = stockAnalysisService.calculateEMA(prices,period);
-        return new ResponseEntity<>(ema,HttpStatus.OK);
-    }
-
-    /**
-     * Returns the WMA index for a stock symbol and the period specified by the period parameter
-     */
-    @GetMapping("/wma")
-    public ResponseEntity<BigDecimal> getWMA(
-            @RequestParam String symbol,
-            @RequestParam int period
-    ){
-        List<StockData> listData = stockService.getByStockSymbol(symbol);
-
-        List<BigDecimal> prices = stockService.getLastTransactionPrices(listData);
-        Collections.reverse(prices);
-        BigDecimal wma = stockAnalysisService.calculateWMA(prices,period);
-        return new ResponseEntity<>(wma,HttpStatus.OK);
-    }
-
-    /**
-     *     Returns the TMA index for a stock symbol and the period specified by the period parameter
-     */
-    @GetMapping("/tma")
-    public ResponseEntity<BigDecimal> getTMA(
-            @RequestParam String symbol,
-            @RequestParam int period
-    ){
-        List<StockData> listData = stockService.getByStockSymbol(symbol);
-
-        List<BigDecimal> prices = stockService.getLastTransactionPrices(listData);
-        Collections.reverse(prices);
-        BigDecimal tma = stockAnalysisService.calculateTMA(prices,period);
-        return new ResponseEntity<>(tma,HttpStatus.OK);
-    }
-    /**
-     * Returns the KAMA index for a stock symbol and the period specified by the period parameter
-     */
-    @GetMapping("/kama")
-    public ResponseEntity<BigDecimal> getKAMA(
-            @RequestParam String symbol,
-            @RequestParam int period
-    ){
-        List<StockData> listData = stockService.getByStockSymbol(symbol);
-
-        List<BigDecimal> prices = stockService.getLastTransactionPrices(listData);
-        Collections.reverse(prices);
-        BigDecimal tma = stockAnalysisService.calculateKAMA(prices,period);
-        return new ResponseEntity<>(tma,HttpStatus.OK);
+        return new ResponseEntity<>(index,HttpStatus.OK);
     }
 
     /**
