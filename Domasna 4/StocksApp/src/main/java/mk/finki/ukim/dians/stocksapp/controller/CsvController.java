@@ -3,6 +3,7 @@ package mk.finki.ukim.dians.stocksapp.controller;
 import mk.finki.ukim.dians.stocksapp.model.StockData;
 import mk.finki.ukim.dians.stocksapp.service.StockService;
 import mk.finki.ukim.dians.stocksapp.service.CSVService;
+import mk.finki.ukim.dians.stocksapp.service.microservice.CsvServiceClient;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,25 +18,18 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/csv")
 @Validated
-@CrossOrigin(origins="*")
+@CrossOrigin(origins = "*")
 public class CsvController {
 
-    private final CSVService csvService;
-    private final StockService stockService;
+    private final CsvServiceClient csvServiceClient;
 
-    public CsvController(CSVService csvService, StockService stockService) {
-        this.csvService = csvService;
-        this.stockService = stockService;
+    public CsvController(CsvServiceClient csvServiceClient) {
+        this.csvServiceClient = csvServiceClient;
     }
 
-    /**
-     * Prepares the headers and the csv data for download
-     */
     @GetMapping
     public ResponseEntity<byte[]> downloadCSV() {
-        List<StockData> stockData = stockService.getAllStockData();
-
-        byte[] csvContent = csvService.generateCSV(stockData);
+        byte[] csvContent = csvServiceClient.downloadCSV();
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Disposition", "attachment; filename=data.csv");
@@ -43,7 +37,32 @@ public class CsvController {
 
         return new ResponseEntity<>(csvContent, headers, HttpStatus.OK);
     }
-
-
-
 }
+
+
+//    private final CSVService csvService;
+//    private final StockService stockService;
+//
+//    public CsvController(CSVService csvService, StockService stockService) {
+//        this.csvService = csvService;
+//        this.stockService = stockService;
+//    }
+//
+//    /**
+//     * Prepares the headers and the csv data for download
+//     */
+//    @GetMapping
+//    public ResponseEntity<byte[]> downloadCSV() {
+//        List<StockData> stockData = stockService.getAllStockData();
+//
+//        byte[] csvContent = csvService.generateCSV(stockData);
+//
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.add("Content-Disposition", "attachment; filename=data.csv");
+//        headers.add("Content-Type", "text/csv");
+//
+//        return new ResponseEntity<>(csvContent, headers, HttpStatus.OK);
+//    }
+
+
+

@@ -12,7 +12,6 @@ import java.util.*;
 public interface MovingAverageSignalService {
     /**
      * Returns a signal based on the comparison of the current price and the Simple Moving Average (SMA).
-     *
      * The signal will be "Buy" if the current price is greater than the SMA, otherwise "Sell".
      *
      * @param currentPrice The current price of the asset.
@@ -22,7 +21,6 @@ public interface MovingAverageSignalService {
     String getSimpleMovingAverageSignal(BigDecimal currentPrice, BigDecimal sma);
     /**
      * Returns a signal based on the comparison of the current price and the Exponential Moving Average (EMA).
-     *
      * The signal will be "Buy" if the current price is greater than the EMA, otherwise "Sell".
      *
      * @param currentPrice The current price of the asset.
@@ -32,7 +30,6 @@ public interface MovingAverageSignalService {
     String getExponentialMovingAverageSignal(BigDecimal currentPrice, BigDecimal ema);
     /**
      * Returns a signal based on the comparison of the current price and the Weighted Moving Average (WMA).
-     *
      * The signal will be "Buy" if the current price is greater than the WMA, otherwise "Sell".
      *
      * @param currentPrice The current price of the asset.
@@ -42,7 +39,6 @@ public interface MovingAverageSignalService {
     String getWeightedMovingAverageSignal(BigDecimal currentPrice, BigDecimal wma);
     /**
      * Returns a signal based on the comparison of the current price and the Triangular Moving Average (TMA).
-     *
      * The signal will be "Buy" if the current price is greater than the TMA, otherwise "Sell".
      *
      * @param currentPrice The current price of the asset.
@@ -52,7 +48,6 @@ public interface MovingAverageSignalService {
     String getTriangularMovingAverageSignal(BigDecimal currentPrice, BigDecimal tma);
     /**
      * Returns a signal based on the comparison of the current price and the Kaufman Adaptive Moving Average (KAMA).
-     *
      * The signal will be "Buy" if the current price is greater than the KAMA, otherwise "Sell".
      *
      * @param currentPrice The current price of the asset.
@@ -62,7 +57,6 @@ public interface MovingAverageSignalService {
     String getKaufmanAdaptiveMovingAverageSignal(BigDecimal currentPrice, BigDecimal kama);
     /**
      * Combines multiple moving average signals into a single signal.
-     *
      * The method counts how many "Buy" and "Sell" signals it receives. If there are more "Buy" signals,
      * the final signal will be "Buy". If there are more "Sell" signals, the final signal will be "Sell".
      * If the counts are equal, it returns "Neutral".
