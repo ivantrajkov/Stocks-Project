@@ -9,14 +9,14 @@ public class CsvServiceClient {
 
     private final RestTemplate restTemplate;
 
-    private static final String CSV_SERVICE_URL = "http://localhost:8082/csv";
+    private static final String URL = "http://localhost:8082/csv";
 
     public CsvServiceClient(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
     public byte[] downloadCSV() {
-        ResponseEntity<byte[]> response = restTemplate.getForEntity(CSV_SERVICE_URL, byte[].class);
+        ResponseEntity<byte[]> response = restTemplate.getForEntity(URL, byte[].class);
         return response.getBody();
     }
 }
