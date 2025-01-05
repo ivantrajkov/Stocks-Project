@@ -10,7 +10,7 @@ public class UserServiceClient {
 
     private final RestTemplate restTemplate;
 
-    private static final String URL = "http://localhost:8081/authentication";
+    private static final String URL = "http://user-service:8081/authentication";
 
     public UserServiceClient(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;

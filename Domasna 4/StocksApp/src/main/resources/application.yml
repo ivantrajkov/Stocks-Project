@@ -3,7 +3,7 @@ spring:
     name: StocksApp
 
   datasource:
-    url: jdbc:postgresql://localhost:5433/stock_data
+    url: jdbc:postgresql://192.168.100.139:5433/stock_data
     driverClassName: org.postgresql.Driver
     username: postgres
     password: password

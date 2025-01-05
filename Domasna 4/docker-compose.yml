@@ -1,0 +1,44 @@
+version: '3'
+services:
+  eureka-server:
+    build:
+      context: ./EurekaServer
+    ports:
+      - "8761:8761"
+    networks:
+      - custom_network
+
+  user-service:
+    build:
+      context: ./UserMicroservice
+    ports:
+      - "8081:8081"
+    networks:
+      - custom_network
+    depends_on:
+      - eureka-server
+
+  csv-microservice:
+    build:
+      context: ./CsvMicroservice
+    ports:
+      - "8082:8082"
+    networks:
+      - custom_network
+    depends_on:
+      - eureka-server
+
+  stocks-app:
+    build:
+      context: ./StocksApp
+    ports:
+      - "8080:8080"
+    networks:
+      - custom_network
+    depends_on:
+      - eureka-server
+      - user-service
+
+networks:
+  custom_network:
+    driver: bridge

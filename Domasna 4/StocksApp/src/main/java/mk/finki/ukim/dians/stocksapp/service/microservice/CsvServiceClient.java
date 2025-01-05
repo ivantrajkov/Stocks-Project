@@ -9,7 +9,7 @@ public class CsvServiceClient {
 
     private final RestTemplate restTemplate;
 
-    private static final String URL = "http://localhost:8082/csv";
+    private static final String URL = "http://csv-microservice:8082/csv";
 
     public CsvServiceClient(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
