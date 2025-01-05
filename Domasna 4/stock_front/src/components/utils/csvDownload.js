@@ -1,5 +1,5 @@
 export const handleDownloadCSV = () => {
-    fetch('http://localhost:8080/csv')
+    fetch('http://stocks-app:8080/csv')
         .then((response) => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');

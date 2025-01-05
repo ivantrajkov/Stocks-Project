@@ -9,7 +9,7 @@ const StockMarket = () => {
     const [filteredData, setFilteredData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const { stockSymbols, eror } = useFetchStockSymbols('http://localhost:8080/api/stocks');
+    const { stockSymbols, eror } = useFetchStockSymbols('http://stocks-app:8080/api/stocks');
 
 
     const [stockSymbolFilter, setStockSymbolFilter] = useState('');
@@ -30,7 +30,7 @@ const StockMarket = () => {
     useEffect(() => {
         const fetchInitialStockData = async () => {
             try {
-                const response = await fetch('http://localhost:8080/api/all');
+                const response = await fetch('http://stocks-app:8080/api/all');
                 if (!response.ok) {
                     throw new Error('Failed to fetch data');
                 }
@@ -55,7 +55,7 @@ const StockMarket = () => {
 
         try {
             const response = await fetch(
-                `http://localhost:8080/api/all?symbol=${stockSymbolFilter}&avgPrice=${averagePriceFilter}&fromDate=${fromDateFilter}&toDate=${toDateFilter}`
+                `http://stocks-app:8080/api/all?symbol=${stockSymbolFilter}&avgPrice=${averagePriceFilter}&fromDate=${fromDateFilter}&toDate=${toDateFilter}`
             );
             if (!response.ok) {
                 throw new Error('Failed to fetch filtered data');

@@ -11,7 +11,7 @@ import renderGauge from "../components/utils/Gauge";
 
 
 const Analyze = () => {
-    const { stockSymbols, eror } = useFetchStockSymbols('http://localhost:8080/api/stocks');
+    const { stockSymbols, eror } = useFetchStockSymbols('http://stocks-app:8080/api/stocks');
     const [error, setError] = useState(null);
     const [selectedStockSymbol, setSelectedStockSymbol] = useState('ADIN');
     const [rsiValue, setRsiValue] = useState(null);
@@ -32,7 +32,7 @@ const Analyze = () => {
     // Function to fetch a specific technical indicator from the backend and set the corresponding state
     const fetchIndicator = async (indicator, setState) => {
         try {
-            const response = await fetch(`http://localhost:8080/api/indicator?symbol=${selectedStockSymbol}&period=${period}&indicator=${indicator}`);
+            const response = await fetch(`http://stocks-app:8080/api/indicator?symbol=${selectedStockSymbol}&period=${period}&indicator=${indicator}`);
             if (!response.ok) {
                 throw new Error(`Failed to fetch ${indicator} value`);
             }
@@ -45,7 +45,7 @@ const Analyze = () => {
     // Function to fetch the oscillator signal from the backend, which is combined from all oscillators
     const fetchOscillatorSignal = async () => {
         try {
-            const response = await fetch(`http://localhost:8080/api/oscillators?rsi=${rsiValue}&stochastic=${stochastic}&rateOfChange=${roc}&momentum=${momentum}&chande=${cmo}`);
+            const response = await fetch(`http://stocks-app:8080/api/oscillators?rsi=${rsiValue}&stochastic=${stochastic}&rateOfChange=${roc}&momentum=${momentum}&chande=${cmo}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch oscillator signal');
             }
@@ -58,7 +58,7 @@ const Analyze = () => {
     // Function to fetch the moving average signal from the backend, which is combined from all moving averages
     const fetchMovingAverageSignal = async () => {
         try {
-            const response = await fetch(`http://localhost:8080/api/movingAverages?symbol=${selectedStockSymbol}&sma=${sma}&ema=${ema}&wma=${wma}&tma=${tma}&kama=${kama}`);
+            const response = await fetch(`http://stocks-app:8080/api/movingAverages?symbol=${selectedStockSymbol}&sma=${sma}&ema=${ema}&wma=${wma}&tma=${tma}&kama=${kama}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch moving average signal');
             }

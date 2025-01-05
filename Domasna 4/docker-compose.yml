@@ -39,6 +39,18 @@ services:
       - eureka-server
       - user-service
 
+  frontend:
+    build:
+      context: ./stock_front
+    ports:
+      - "3000:3000"
+    networks:
+      - custom_network
+    environment:
+      - PORT=3000
+    depends_on:
+      - stocks-app
+
 networks:
   custom_network:
     driver: bridge
