@@ -16,7 +16,7 @@ const Login = () => {
             return;
         }
 
-        fetch('http://stocks-app:8080/authentication/login', {
+        fetch('http://localhost:8080/authentication/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',

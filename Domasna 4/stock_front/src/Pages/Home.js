@@ -9,7 +9,7 @@ const Home = () => {
     const [username, setUsername] = useState(null);
 
     useEffect(() => {
-        fetch('http://stocks-app:8080/authentication/loggedIn')
+        fetch('http://localhost:8080/authentication/loggedIn')
             .then((response) => response.text())
             .then((data) => setUsername(data))
             .catch((error) => console.error('Error getting the username!', error));
