@@ -3,10 +3,12 @@ spring:
     name: StocksApp
 
   datasource:
-    url: jdbc:postgresql://192.168.100.139:5433/stock_data
+    url: jdbc:postgresql://db:5432/stock_data
+
     driverClassName: org.postgresql.Driver
     username: postgres
     password: password
+
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:

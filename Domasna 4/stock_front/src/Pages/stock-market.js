@@ -10,8 +10,6 @@ const StockMarket = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const { stockSymbols, eror } = useFetchStockSymbols('http://localhost:8080/api/stocks');
-
-
     const [stockSymbolFilter, setStockSymbolFilter] = useState('');
     const [selectedStockSymbol, setSelectedStockSymbol] = useState('ZPOG');
     const [averagePriceFilter, setAveragePriceFilter] = useState('');

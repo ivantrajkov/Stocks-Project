@@ -6,6 +6,7 @@ services:
     ports:
       - "8761:8761"
     networks:
+
       - custom_network
 
   user-service:
@@ -38,6 +39,7 @@ services:
     depends_on:
       - eureka-server
       - user-service
+      - db
 
   frontend:
     build:
@@ -51,6 +53,31 @@ services:
     depends_on:
       - stocks-app
 
+  db:
+    image: postgres:17
+    container_name: postgres_db
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: stock_data
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "postgres" ]
+      interval: 30s
+      retries: 5
+      timeout: 10s
+    networks:
+      - custom_network
+
+
 networks:
   custom_network:
     driver: bridge
+
+volumes:
+  postgres_data:
