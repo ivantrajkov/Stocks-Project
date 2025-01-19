@@ -11,6 +11,7 @@ const StockGraph = () => {
     const location = useLocation();
     const { symbol } = queryString.parse(location.search);
 
+    //Fetches data to show on the graph
     useEffect(() => {
         const fetchData = async () => {
             if (!symbol) return;
