@@ -3,6 +3,8 @@
   Дизајн и архитектура на софтвер домашни за проект
   </br>
   Design and architecture of software project homeworks
+  </br>
+  Документот за Design Pattern се наоѓа како .pdf фајл во фолдерот Domasna 4
 </p>
 <p>
   Иван Трајков 221267
