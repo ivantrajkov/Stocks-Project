@@ -4,7 +4,7 @@
   </br>
   Design and architecture of software project homeworks
   </br>
-  Документот за Design Pattern се наоѓа како .pdf фајл во фолдерот Domasna 4
+  Документот за Design Pattern се наоѓа <a href="./Domasna 4/Design Pattern.pdf" target="_blank">тука</a>.
 </p>
 <p>
   Иван Трајков 221267
