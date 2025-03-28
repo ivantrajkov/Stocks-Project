@@ -1,6 +1,10 @@
 # Stocks-Project
 <h2>Design and architecture of software project</h2>
 <p>This project which contains 4 parts is a continious work on the same application designed to showcase each step from scratch of building an early application, which in this case is a stocks application.</p>
+<p>
+  </br>
+  Document for the explanation for the usage of the chosen <a href="./Domasna 4/Design Pattern.pdf" target="_blank">design</a> pattern.
+</p>
 <p><b>Steps:</b></p>
 <ol>
   <li> <h2><a href="./Домашна 1/OpisBaranjaProekt.pdf">Writing the requirements and user stories</a></h2>
@@ -217,10 +221,7 @@ volumes:
 ```
   </li>
 </ol>
-<p>
-  </br>
-  Document for the explanation for the usage of the chosen design pattern is <a href="./Domasna 4/Design Pattern.pdf" target="_blank">here</a>.
-</p>
+
 <p>
   Ivan Trajkov 221267
   <br>
