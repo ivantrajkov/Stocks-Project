@@ -1,5 +1,5 @@
 # Stocks-Project
-<h1>Design and architecture of software project</h1>
+<h2>Design and architecture of software project</h2>
 <p>This project which contains 4 parts is a continious work on the same application designed to showcase each step from scratch of building an early application, which in this case is a stocks application.</p>
 <p><b>Steps:</b></p>
 <ol>
