@@ -3,19 +3,23 @@
 <p>This project which contains 4 parts is a continious work on the same application designed to showcase each step from scratch of building an early application, which in this case is a stocks application.</p>
 <p><b>Steps:</b></p>
 <ol>
-  <li>Writing the requirements and user stories
+  <li> <h2>Writing the requirements and user stories</h2>
     <ul>
     <li>
+      <h3>
       Webscraping the needed stocks for further continuation of the development
+      </h3>
     </li>
       </ul>
   </li>
-  <li>Building a mockup, tech prototype and an overall architecture design of the system and the technologies that will be used</li>
+  <li><h2>Building a mockup, tech prototype and an overall architecture design of the system and the technologies that will be used</h2></li>
   <li>
-    A working application in its first release
+    <h2>A working application in its first release</h2>
   </li>
   <li>
+    <h2>
     Refactoring of the code using design patterns, improving the structure of the code, dockerization and containerization of the application.
+      </h2>
   </li>
 </ol>
 <p>
