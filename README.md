@@ -28,10 +28,42 @@
     Refactoring of the code using design patterns, improving the structure of the code, dockerization and containerization of the application.
       </h2>
     <h3>Refactored code examples</h3>
-    
-    ```java
-    
-    ```
+
+    /**
+     *
+     * @param symbol the stock for which we are going to calculate
+     * @param period the period for which we are going to calculate
+     * @param indicator the technical oscillator or moving average we calculate
+     * @return the index value for that indicator
+     */
+    @GetMapping("/indicator")
+    public ResponseEntity<BigDecimal> getIndicator(
+            @RequestParam String symbol,
+            @RequestParam int period,
+            @RequestParam String indicator
+    ){
+        List<StockData> listData = stockService.getByStockSymbol(symbol);
+        List<BigDecimal> prices = stockService.getLastTransactionPrices(listData);
+
+        Collections.reverse(prices);
+        BigDecimal index = BigDecimal.valueOf(0);
+        index = switch (indicator) {
+            case "rsi" -> stockAnalysisService.calculateRSI(prices, period);
+            case "stochastic" -> stockAnalysisService.calculateStochasticK(prices, period);
+            case "roc" -> stockAnalysisService.calculateROC(prices, period);
+            case "momentum" -> stockAnalysisService.calculateMomentum(prices, period);
+            case "sma" -> stockAnalysisService.calculateSMAOscillator(prices, period);
+            case "cmo" -> stockAnalysisService.calculateCMO(prices, period);
+            case "ema" -> stockAnalysisService.calculateEMA(prices, period);
+            case "wma" -> stockAnalysisService.calculateWMA(prices, period);
+            case "tma" -> stockAnalysisService.calculateTMA(prices, period);
+            case "kama" -> stockAnalysisService.calculateKAMA(prices, period);
+            default -> index;
+        };
+
+        return new ResponseEntity<>(index,HttpStatus.OK);
+    }
+
   </li>
 </ol>
 <p>
