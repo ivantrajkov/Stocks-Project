@@ -126,6 +126,95 @@ public interface StockService {
 }
 ```
 
+<h3>Docker-compose:</h3>
+
+```yaml
+
+version: '3'
+services:
+  eureka-server:
+    build:
+      context: ./EurekaServer
+    ports:
+      - "8761:8761"
+    networks:
+
+      - custom_network
+
+  user-service:
+    build:
+      context: ./UserMicroservice
+    ports:
+      - "8081:8081"
+    networks:
+      - custom_network
+    depends_on:
+      - eureka-server
+
+  csv-microservice:
+    build:
+      context: ./CsvMicroservice
+    ports:
+      - "8082:8082"
+    networks:
+      - custom_network
+    depends_on:
+      - eureka-server
+
+  stocks-app:
+    build:
+      context: ./StocksApp
+    ports:
+      - "8080:8080"
+    networks:
+      - custom_network
+    depends_on:
+      - eureka-server
+      - user-service
+      - db
+
+  frontend:
+    build:
+      context: ./stock_front
+    ports:
+      - "3000:3000"
+    networks:
+      - custom_network
+    environment:
+      - PORT=3000
+    depends_on:
+      - stocks-app
+
+  db:
+    image: postgres:17
+    container_name: postgres_db
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: stock_data
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "postgres" ]
+      interval: 30s
+      retries: 5
+      timeout: 10s
+    networks:
+      - custom_network
+
+
+networks:
+  custom_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+
+```
   </li>
 </ol>
 <p>
