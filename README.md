@@ -15,16 +15,23 @@
   <li><h2>Building a mockup, tech prototype and an overall architecture design of the system and the technologies that will be used</h2>
     <h3>Mockup:</h3>
     <img src="./Домашна 2/mockups/home.png">
-    <h3>Design:</h3>
+    <h3>Architecture design:</h3>
     <img src="./Домашна 2/архитектура/Implementation.png">
   </li>
   <li>
     <h2>A working application in its first release</h2>
+    <h3>Application example:</h3>
+    <img src="./pictures/analyze.png">
   </li>
   <li>
     <h2>
     Refactoring of the code using design patterns, improving the structure of the code, dockerization and containerization of the application.
       </h2>
+    <h3>Refactored code examples</h3>
+    
+    ```java
+    
+    ```
   </li>
 </ol>
 <p>
