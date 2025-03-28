@@ -17,7 +17,7 @@
       </ul>
   </li>
   <li><h2>Building a mockup, tech prototype and an overall architecture design of the system and the technologies that will be used</h2>
-    <h3>Mockup:</h3>
+    <h3>Figma mockup:</h3>
     <img src="./Домашна 2/mockups/home.png">
     <h3>Architecture design:</h3>
     <img src="./Домашна 2/архитектура/Implementation.png">
