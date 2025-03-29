@@ -1,5 +1,12 @@
 # Stocks-Project
 <h2>Design and architecture of software project</h2>
+<div>
+  <ul>
+  <li>Ivan Trajkov 221267</li>
+  <li>Dushan Tashev 221099</li>
+  <li>Kristijan Simonovski 221244</li>
+  </ul>
+</div>
 <p>This project which contains 4 parts is a continious work on the same application designed to showcase each step from scratch of building an early application, which in this case is a stocks application.</p>
 <p>
   </br>
@@ -222,11 +229,4 @@ volumes:
   </li>
 </ol>
 
-<p>
-  Ivan Trajkov 221267
-  <br>
-  Dushan Tashev 221099
-  <br>
-  Kristijan Simonovski 221244
-</p>
 
